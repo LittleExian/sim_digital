@@ -24,73 +24,114 @@
       
       <!-- 中央图片区域（占3/5） -->
       <div class="central-image-container">
-        <div class="equipment-image-wrapper" v-if="currentSystemState === 'running'">
+        <div class="equipment-image-wrapper">
           <!-- 底层图片 -->
           <img src="/equipment.png" alt="三联供系统设备示意图" style="width: 100%; height: 100%; object-fit: fill;">
           
           <!-- 顶层数据点层 -->
           <div class="data-points-overlay">
-            <!-- 燃气发电机数据点 -->
-             <div class="data-point" style="left: 30%; top: 40%;" :class="{ 'alert': systemData.running.generator.UabValue < 380 || systemData.running.generator.UabValue > 420 }" @click.stop="toggleDataLabels">
-               <div class="data-point-circle"></div>
-               <div class="data-point-label" v-if="showDataLabels">
-                 <div class="data-point-title">发电电压</div>
-                 <div class="data-point-value">{{ systemData.running.generator.Uab }}</div>
+            <!-- 冷却水供水温度 -->
+             <div class="data-point" style="left: 70.5%; top: 40%;" :class="{ 'alert': currentSystemState === 'shutdown' }" @click.stop="toggleDataLabels('coolingWaterSupplyTemperature')">
+               <div class="data-point-wrapper">
+                 <div class="data-point-circle"></div>
+                 <div class="data-point-content">
+                   <div class="data-point-label" v-if="dataPointsVisibility.coolingWaterSupplyTemperature">
+                     <div class="data-point-title">冷却水供水温度</div>
+                     <div class="data-point-value">{{ systemData[currentSystemState].lithium.coolInTemp }}</div>
+                   </div>
+                 </div>
                </div>
              </div>
-              
-             <!-- 电流数据点 -->
-             <div class="data-point" style="left: 45%; top: 40%;" :class="{ 'alert': systemData.running.generator.currentAValue > 180 }" @click.stop="toggleDataLabels">
-               <div class="data-point-circle"></div>
-               <div class="data-point-label" v-if="showDataLabels">
-                 <div class="data-point-title">A相电流</div>
-                 <div class="data-point-value">{{ systemData.running.generator.currentA }}</div>
+
+             <!-- 冷却水回水温度 -->
+             <div class="data-point" style="left: 82%; top: 42%;" :class="{ 'alert': currentSystemState === 'shutdown' }" @click.stop="toggleDataLabels('coolingWaterReturnTemperature')">
+               <div class="data-point-wrapper">
+                 <div class="data-point-circle"></div>
+                 <div class="data-point-content">
+                   <div class="data-point-label" v-if="dataPointsVisibility.coolingWaterReturnTemperature">
+                     <div class="data-point-title">冷却水回水温度</div>
+                     <div class="data-point-value">{{ systemData[currentSystemState].lithium.coolOutTemp }}</div>
+                   </div>
+                 </div>
                </div>
              </div>
-              
-             <!-- 功率数据点 -->
-             <div class="data-point" style="left: 60%; top: 40%;" :class="{ 'alert': systemData.running.generator.powerTotalValue < 30 }" @click.stop="toggleDataLabels">
-               <div class="data-point-circle"></div>
-               <div class="data-point-label" v-if="showDataLabels">
-                 <div class="data-point-title">总有功功率</div>
-                 <div class="data-point-value">{{ systemData.running.generator.powerTotal }}</div>
+
+             <!-- 冷水供水温度 -->
+             <div class="data-point" style="left: 64.5%; top: 55%;" :class="{ 'alert': currentSystemState === 'shutdown' }" @click.stop="toggleDataLabels('coldWaterSupplyTemperature')">
+               <div class="data-point-wrapper">
+                 <div class="data-point-circle"></div>
+                 <div class="data-point-content">
+                   <div class="data-point-label" v-if="dataPointsVisibility.coldWaterSupplyTemperature">
+                     <div class="data-point-title">冷水供水温度</div>
+                     <div class="data-point-value">{{ systemData[currentSystemState].lithium.coldInTemp }}</div>
+                   </div>
+                 </div>
                </div>
              </div>
-              
-             <!-- 冷水温度数据点 -->
-             <div class="data-point" style="left: 30%; top: 60%;" :class="{ 'alert': systemData.running.lithium.coldInTempValue > 12 }" @click.stop="toggleDataLabels">
-               <div class="data-point-circle"></div>
-               <div class="data-point-label" v-if="showDataLabels">
-                 <div class="data-point-title">冷水供水温度</div>
-                 <div class="data-point-value">{{ systemData.running.lithium.coldInTemp }}</div>
+
+             <!-- 冷水回水温度 -->
+             <div class="data-point" style="left: 69.5%; top: 75%;" :class="{ 'alert': currentSystemState === 'shutdown' }" @click.stop="toggleDataLabels('coldWaterReturnTemperature')">
+               <div class="data-point-wrapper">
+                 <div class="data-point-circle"></div>
+                 <div class="data-point-content">
+                   <div class="data-point-label" v-if="dataPointsVisibility.coldWaterReturnTemperature">
+                     <div class="data-point-title">冷水回水温度</div>
+                     <div class="data-point-value">{{ systemData[currentSystemState].lithium.coldOutTemp }}</div>
+                   </div>
+                 </div>
                </div>
              </div>
-              
-             <!-- 热水温度数据点 -->
-             <div class="data-point" style="left: 45%; top: 60%;" :class="{ 'alert': systemData.running.lithium.hotInTempValue < 85 }" @click.stop="toggleDataLabels">
-               <div class="data-point-circle"></div>
-               <div class="data-point-label" v-if="showDataLabels">
-                 <div class="data-point-title">热水入口温度</div>
-                 <div class="data-point-value">{{ systemData.running.lithium.hotInTemp }}</div>
+
+             <!-- 热水入口温度 -->
+             <div class="data-point" style="left: 36%; top: 29.5%;" :class="{ 'alert': currentSystemState === 'shutdown' }" @click.stop="toggleDataLabels('hotWaterSupplyTemperature')">
+               <div class="data-point-wrapper">
+                 <div class="data-point-circle"></div>
+                 <div class="data-point-content">
+                   <div class="data-point-label" v-if="dataPointsVisibility.hotWaterSupplyTemperature">
+                     <div class="data-point-title">热水入口温度</div>
+                     <div class="data-point-value">{{ systemData[currentSystemState].lithium.hotInTemp }}</div>
+                   </div>
+                 </div>
                </div>
              </div>
-              
-             <!-- 并网开关状态数据点 -->
-             <div class="data-point" style="left: 60%; top: 60%;" :class="{ 'alert': systemData.running.generator.gridSwitch !== '合闸' }" @click.stop="toggleDataLabels">
-               <div class="data-point-circle"></div>
-               <div class="data-point-label" v-if="showDataLabels">
-                 <div class="data-point-title">并网开关</div>
-                 <div class="data-point-value" :class="systemData.running.generator.gridSwitch === '合闸' ? 'normal' : 'abnormal'">
-                   {{ systemData.running.generator.gridSwitch }}
+
+             <!-- 热水出口温度 -->
+             <div class="data-point" style="left: 36%; top: 34%;" :class="{ 'alert': currentSystemState === 'shutdown' }" @click.stop="toggleDataLabels('hotWaterReturnTemperature')">
+               <div class="data-point-wrapper">
+                 <div class="data-point-circle"></div>
+                 <div class="data-point-content">
+                   <div class="data-point-label" v-if="dataPointsVisibility.hotWaterReturnTemperature">
+                     <div class="data-point-title">热水出口温度</div>
+                     <div class="data-point-value">{{ systemData[currentSystemState].lithium.hotOutTemp }}</div>
+                   </div>
+                 </div>
+               </div>
+             </div>
+
+             <!-- 发电机参数 -->
+             <div class="data-point" style="left: 20%; top: 20%;" :class="{ 'alert': currentSystemState === 'shutdown' }" @click.stop="toggleDataLabels('generatorVoltage')">
+               <div class="data-point-wrapper">
+                 <div class="data-point-circle"></div>
+                 <div class="data-point-content">
+                   <div class="data-point-label" v-if="dataPointsVisibility.generatorVoltage">
+                     <div class="data-point-title">发电Uab</div>
+                     <div class="data-point-value">{{ systemData[currentSystemState].generator.Uab }}</div>
+                     <div class="data-point-title">A相电流</div>
+                     <div class="data-point-value">{{ systemData[currentSystemState].generator.currentA }}</div>
+                     <div class="data-point-title">总有功功率</div>
+                     <div class="data-point-value">{{ systemData[currentSystemState].generator.powerTotal }}</div>
+                     <div class="data-point-title">总无功功率</div>
+                     <div class="data-point-value">{{ systemData[currentSystemState].generator.reactiveTotal }}</div>
+                   </div>
                  </div>
                </div>
              </div>
           </div>
         </div>
         
-        <div class="placeholder-image" v-else>
+        <!-- <div class="placeholder-image" v-else>
           <span>系统停机中，启动后显示设备运行画面</span>
-        </div>
+        </div> -->
       </div>
       
       <!-- 右侧控制区 -->
@@ -464,8 +505,16 @@ export default {
       currentTime: '',
       // 当前系统状态：shutdown（停机）/ running（运行）
       currentSystemState: 'running',
-      // 控制数据点标签的显示状态，默认显示
-      showDataLabels: true,
+      // 每个数据点独立的显示状态，默认都隐藏
+      dataPointsVisibility: {
+        coolingWaterSupplyTemperature: true,
+        coolingWaterReturnTemperature: true,
+        coldWaterSupplyTemperature: true,
+        coldWaterReturnTemperature: true,
+        hotWaterSupplyTemperature: true,
+        hotWaterReturnTemperature: true,
+        generatorVoltage: true
+      },
       // 两套数据：严格对应「画面数据.xlsx」
       systemData: {
         // 系统停机数据
@@ -582,8 +631,8 @@ export default {
       this.currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
     },
     // 切换数据点标签的显示状态
-    toggleDataLabels() {
-      this.showDataLabels = !this.showDataLabels;
+    toggleDataLabels(pointName) {
+      this.dataPointsVisibility[pointName] = !this.dataPointsVisibility[pointName];
     }
   }
 }
@@ -961,9 +1010,6 @@ body {
 .data-point {
   position: absolute;
   transform: translate(-50%, -50%);
-  display: flex;
-  align-items: center;
-  gap: 10px;
   pointer-events: auto;
   z-index: 10;
 }
@@ -977,6 +1023,10 @@ body {
   box-shadow: 0 0 10px rgba(0, 191, 255, 0.8);
   animation: pulse 2s infinite;
   border: 2px solid rgba(255, 255, 255, 0.8);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 /* 数据点脉冲动画 */
@@ -995,34 +1045,58 @@ body {
   }
 }
 
-/* 数据点标签 */
-.data-point-label {
-  background: rgba(10, 40, 60, 0.9);
-  border: 1px solid rgba(0, 191, 255, 0.5);
-  border-radius: 5px;
-  padding: 6px 10px;
-  backdrop-filter: blur(5px);
-  white-space: nowrap;
-  opacity: 1;
-  transform: translateX(0);
-  transition: all 0.3s ease;
-  pointer-events: none;
+/* 数据点内容容器 */
+.data-point-content {
+  position: relative;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
-  min-width: 80px;
+  gap: 10px;
+}
+
+/* 数据点标签 */
+   .data-point-label {
+     background: rgba(10, 40, 60, 0.9);
+     border: 1px solid rgba(0, 191, 255, 0.5);
+     border-radius: 5px;
+     padding: 6px 10px;
+     backdrop-filter: blur(5px);
+     white-space: nowrap;
+     opacity: 1;
+     transform: translateX(0);
+     transition: all 0.3s ease;
+     pointer-events: none;
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+     min-width: 80px;
+     position: absolute;
+     left: 100%;
+     top: 50%;
+     transform: translateY(-50%);
+     margin-left: 30px;
+     z-index: 11;
+   }
+
+/* 数据点包装器 */
+.data-point-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 /* 点击区域扩大 */
 .data-point {
   cursor: pointer;
+  width: 20px;
+  height: 20px;
 }
 
 /* 数据点标题 */
 .data-point-title {
   font-size: 12px;
   color: #b0c4de;
+  margin-top: 2px;
   margin-bottom: 2px;
 }
 
@@ -1031,6 +1105,7 @@ body {
   font-size: 14px;
   font-weight: bold;
   color: #ffffff;
+  margin-bottom: 2px;
 }
 
 /* 数据点异常状态 */
