@@ -1,43 +1,122 @@
 <template>
   <div class="dashboard-container">
-    <!-- 主内容区域 -->
-    <div class="main-content">
-      <!-- 左侧区域 2/5 -->
-      <div class="left-section">
-        <!-- 实时日期时间 -->
+    <!-- 顶部区域：图片和控制按钮 -->
+    <div class="top-section">
+      <!-- 左侧控制区 -->
+      <div class="left-controls">
+        <!-- 实时日期时间（两行显示） -->
         <div class="datetime-display">
-            <span>{{ currentDate }}</span>
-            <span class="time-separator">|</span>
-            <span>{{ currentTime }}</span>
+            <div class="date-line">{{ currentDate }}</div>
+            <div class="time-line">{{ currentTime }}</div>
         </div>
-        <!-- 按钮区域（绑定启动/停机事件） -->
-        <div class="button-container">
-          <div class="button-column">
-            <button class="dashboard-button secondary" @click="handleOptimizationClick">
+        <!-- 左侧按钮组 -->
+        <div class="left-buttons">
+            <button class="dashboard-button primary" @click="handleOptimizationClick">
               <span class="button-icon">⚡</span>
               <span>运行优化</span>
             </button>
-            <button class="dashboard-button secondary" @click="handleDiagnosisClick">
+            <button class="dashboard-button primary" @click="handleDiagnosisClick">
               <span class="button-icon">🔍</span>
               <span>故障诊断</span>
             </button>
+        </div>
+      </div>
+      
+      <!-- 中央图片区域（占3/5） -->
+      <div class="central-image-container">
+        <div class="equipment-image-wrapper" v-if="currentSystemState === 'running'">
+          <!-- 底层图片 -->
+          <img src="/equipment.png" alt="三联供系统设备示意图" style="width: 100%; height: 100%; object-fit: fill;">
+          
+          <!-- 顶层数据点层 -->
+          <div class="data-points-overlay">
+            <!-- 燃气发电机数据点 -->
+             <div class="data-point" style="left: 30%; top: 40%;" :class="{ 'alert': systemData.running.generator.UabValue < 380 || systemData.running.generator.UabValue > 420 }" @click.stop="toggleDataLabels">
+               <div class="data-point-circle"></div>
+               <div class="data-point-label" v-if="showDataLabels">
+                 <div class="data-point-title">发电电压</div>
+                 <div class="data-point-value">{{ systemData.running.generator.Uab }}</div>
+               </div>
+             </div>
+              
+             <!-- 电流数据点 -->
+             <div class="data-point" style="left: 45%; top: 40%;" :class="{ 'alert': systemData.running.generator.currentAValue > 180 }" @click.stop="toggleDataLabels">
+               <div class="data-point-circle"></div>
+               <div class="data-point-label" v-if="showDataLabels">
+                 <div class="data-point-title">A相电流</div>
+                 <div class="data-point-value">{{ systemData.running.generator.currentA }}</div>
+               </div>
+             </div>
+              
+             <!-- 功率数据点 -->
+             <div class="data-point" style="left: 60%; top: 40%;" :class="{ 'alert': systemData.running.generator.powerTotalValue < 30 }" @click.stop="toggleDataLabels">
+               <div class="data-point-circle"></div>
+               <div class="data-point-label" v-if="showDataLabels">
+                 <div class="data-point-title">总有功功率</div>
+                 <div class="data-point-value">{{ systemData.running.generator.powerTotal }}</div>
+               </div>
+             </div>
+              
+             <!-- 冷水温度数据点 -->
+             <div class="data-point" style="left: 30%; top: 60%;" :class="{ 'alert': systemData.running.lithium.coldInTempValue > 12 }" @click.stop="toggleDataLabels">
+               <div class="data-point-circle"></div>
+               <div class="data-point-label" v-if="showDataLabels">
+                 <div class="data-point-title">冷水供水温度</div>
+                 <div class="data-point-value">{{ systemData.running.lithium.coldInTemp }}</div>
+               </div>
+             </div>
+              
+             <!-- 热水温度数据点 -->
+             <div class="data-point" style="left: 45%; top: 60%;" :class="{ 'alert': systemData.running.lithium.hotInTempValue < 85 }" @click.stop="toggleDataLabels">
+               <div class="data-point-circle"></div>
+               <div class="data-point-label" v-if="showDataLabels">
+                 <div class="data-point-title">热水入口温度</div>
+                 <div class="data-point-value">{{ systemData.running.lithium.hotInTemp }}</div>
+               </div>
+             </div>
+              
+             <!-- 并网开关状态数据点 -->
+             <div class="data-point" style="left: 60%; top: 60%;" :class="{ 'alert': systemData.running.generator.gridSwitch !== '合闸' }" @click.stop="toggleDataLabels">
+               <div class="data-point-circle"></div>
+               <div class="data-point-label" v-if="showDataLabels">
+                 <div class="data-point-title">并网开关</div>
+                 <div class="data-point-value" :class="systemData.running.generator.gridSwitch === '合闸' ? 'normal' : 'abnormal'">
+                   {{ systemData.running.generator.gridSwitch }}
+                 </div>
+               </div>
+             </div>
           </div>
-          <div class="button-column">
-            <button class="dashboard-button primary" :class="{ active: currentSystemState === 'running' }" @click="setSystemState('running')">
+        </div>
+        
+        <div class="placeholder-image" v-else>
+          <span>系统停机中，启动后显示设备运行画面</span>
+        </div>
+      </div>
+      
+      <!-- 右侧控制区 -->
+      <div class="right-controls">
+        <!-- 右侧按钮组 -->
+        <div class="right-buttons">
+            <button class="dashboard-button secondary" :class="{ active: currentSystemState === 'running' }" @click="setSystemState('running')">
               <span class="button-icon">▶</span>
               <span>系统启动</span>
             </button>
-            <button class="dashboard-button primary" :class="{ active: currentSystemState === 'shutdown' }" @click="setSystemState('shutdown')">
+            <button class="dashboard-button secondary" :class="{ active: currentSystemState === 'shutdown' }" @click="setSystemState('shutdown')">
               <span class="button-icon">◼</span>
               <span>系统停机</span>
             </button>
-            <button class="dashboard-button primary" @click="handleFaultReset">
+            <button class="dashboard-button secondary" @click="handleFaultReset">
               <span class="button-icon">🔄</span>
               <span>故障复位</span>
             </button>
-          </div>
         </div>
-        <!-- 数据列表区域（动态绑定启动/停机数据） -->
+      </div>
+    </div>
+    
+    <!-- 底部区域 -->
+    <div class="bottom-section">
+      <!-- 左侧数据列表区域（占1/2） -->
+      <div class="bottom-left">
         <div class="data-lists-container">
           <!-- 燃气发电机数据（含市电+发电参数） -->
           <div class="data-list">
@@ -144,78 +223,10 @@
           </div>
         </div>
       </div>
-      <!-- 右侧区域 3/5 -->
-      <div class="right-section">
-        <!-- 设备示意图（添加数据点层） -->
-        <div class="image-container">
-          <div class="equipment-image-wrapper" v-if="currentSystemState === 'running'">
-            <!-- 底层图片 -->
-            <img src="/equipment.png" alt="三联供系统设备示意图" style="width: 100%; height: 100%; object-fit: cover;">
-            
-            <!-- 顶层数据点层 -->
-            <div class="data-points-overlay">
-              <!-- 燃气发电机数据点 -->
-               <div class="data-point" style="left: 30%; top: 40%;" :class="{ 'alert': systemData.running.generator.UabValue < 380 || systemData.running.generator.UabValue > 420 }" @click.stop="toggleDataLabels">
-                 <div class="data-point-circle"></div>
-                 <div class="data-point-label" v-if="showDataLabels">
-                   <div class="data-point-title">发电电压</div>
-                   <div class="data-point-value">{{ systemData.running.generator.Uab }}</div>
-                 </div>
-               </div>
-                
-               <!-- 电流数据点 -->
-               <div class="data-point" style="left: 45%; top: 40%;" :class="{ 'alert': systemData.running.generator.currentAValue > 180 }" @click.stop="toggleDataLabels">
-                 <div class="data-point-circle"></div>
-                 <div class="data-point-label" v-if="showDataLabels">
-                   <div class="data-point-title">A相电流</div>
-                   <div class="data-point-value">{{ systemData.running.generator.currentA }}</div>
-                 </div>
-               </div>
-                
-               <!-- 功率数据点 -->
-               <div class="data-point" style="left: 60%; top: 40%;" :class="{ 'alert': systemData.running.generator.powerTotalValue < 30 }" @click.stop="toggleDataLabels">
-                 <div class="data-point-circle"></div>
-                 <div class="data-point-label" v-if="showDataLabels">
-                   <div class="data-point-title">总有功功率</div>
-                   <div class="data-point-value">{{ systemData.running.generator.powerTotal }}</div>
-                 </div>
-               </div>
-                
-               <!-- 冷水温度数据点 -->
-               <div class="data-point" style="left: 30%; top: 60%;" :class="{ 'alert': systemData.running.lithium.coldInTempValue > 12 }" @click.stop="toggleDataLabels">
-                 <div class="data-point-circle"></div>
-                 <div class="data-point-label" v-if="showDataLabels">
-                   <div class="data-point-title">冷水供水温度</div>
-                   <div class="data-point-value">{{ systemData.running.lithium.coldInTemp }}</div>
-                 </div>
-               </div>
-                
-               <!-- 热水温度数据点 -->
-               <div class="data-point" style="left: 45%; top: 60%;" :class="{ 'alert': systemData.running.lithium.hotInTempValue < 85 }" @click.stop="toggleDataLabels">
-                 <div class="data-point-circle"></div>
-                 <div class="data-point-label" v-if="showDataLabels">
-                   <div class="data-point-title">热水入口温度</div>
-                   <div class="data-point-value">{{ systemData.running.lithium.hotInTemp }}</div>
-                 </div>
-               </div>
-                
-               <!-- 并网开关状态数据点 -->
-               <div class="data-point" style="left: 60%; top: 60%;" :class="{ 'alert': systemData.running.generator.gridSwitch !== '合闸' }" @click.stop="toggleDataLabels">
-                 <div class="data-point-circle"></div>
-                 <div class="data-point-label" v-if="showDataLabels">
-                   <div class="data-point-title">并网开关</div>
-                   <div class="data-point-value" :class="systemData.running.generator.gridSwitch === '合闸' ? 'normal' : 'abnormal'">
-                     {{ systemData.running.generator.gridSwitch }}
-                   </div>
-                 </div>
-               </div>
-            </div>
-          </div>
-          
-          <div class="placeholder-image" v-else>
-            <span>系统停机中，启动后显示设备运行画面</span>
-          </div>
-        </div>
+      
+      <!-- 右侧图表区域（占1/2） -->
+      <div class="bottom-right">
+
         <!-- 圆形图表区域（动态绑定启动/停机数据） -->
         <div class="gauge-charts-container">
           <!-- 发电机电压 -->
@@ -439,9 +450,10 @@
             </div>
           </div>
         </div>
+          
+        </div>
       </div>
     </div>
-  </div>
 </template>
 <script>
 export default {
@@ -580,13 +592,22 @@ export default {
 /* 保留原样式，新增坐标轴相关样式 */
 .dashboard-container {
   width: 100%;
-  height: 100vh;
   background: #0a1929;
   color: #ffffff;
   font-family: 'Arial', sans-serif;
   padding: 20px;
   box-sizing: border-box;
   position: relative;
+  min-height: 100vh;
+  overflow-y: auto;
+}
+
+/* 确保页面可以滚动 */
+body {
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  background: #0a1929;
 }
 .datetime-display {
   display: block;
@@ -605,6 +626,7 @@ export default {
   margin-left: 0;
   width: fit-content;
   align-self: center;
+  margin-bottom: 20px;
 }
 @keyframes timePulse {
   from {
@@ -621,37 +643,77 @@ export default {
   color: #00bfff;
   font-size: 24px;
 }
-.main-content {
+
+/* 新布局样式 */
+.top-section {
   display: flex;
-  min-height: calc(100vh - 80px);
-  max-height: calc(100vh - 80px);
+  width: 100%;
   gap: 20px;
-  overflow-y: auto;
+  margin-bottom: 20px;
+  align-items: stretch;
 }
-.left-section {
-  width: 40%;
+
+.left-controls {
+  width: 28%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.central-image-container {
+  width: 100%;
+  height: 60vh;
+  min-height: 400px;
+  background: rgba(10, 40, 60, 0.7);
+  border-radius: 10px;
+  border: 1px solid rgba(0, 191, 255, 0.2);
+  display: flex;
+  align-items: center;
+  padding-left: 0%;
+  overflow: hidden;
+  position: relative;
+}
+
+.right-controls {
+  width: 15%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.left-buttons, .right-buttons {
   display: flex;
   flex-direction: column;
   gap: 20px;
   align-items: center;
 }
-.right-section {
-  width: 60%;
+
+.bottom-section {
+  display: flex;
+  width: 100%;
+  gap: 20px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.bottom-left {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.bottom-right {
+  width: 50%;
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 /* 按钮区域样式（新增激活态） */
-.button-container {
-  display: flex;
-  gap: 100px;
-  margin-top: 20px;
-}
-.button-column {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
 .dashboard-button {
   display: flex;
   align-items: center;
@@ -693,20 +755,123 @@ export default {
   font-size: 16px;
 }
 .dashboard-button.primary {
-  background: linear-gradient(135deg, rgba(0, 191, 255, 0.2), rgba(0, 119, 204, 0.2));
-  border-color: #0077cc;
+  /* 运行优化和故障诊断按钮 - 更明显的样式 */
+  background: linear-gradient(135deg, rgba(50, 205, 50, 0.3), rgba(34, 139, 34, 0.3));
+  border-color: #32cd32;
+  color: #ffffff;
+  box-shadow: 0 0 15px rgba(50, 205, 50, 0.3);
 }
 .dashboard-button.primary:hover {
-  background: linear-gradient(135deg, rgba(0, 191, 255, 0.3), rgba(0, 119, 204, 0.3));
-  border-color: #00bfff;
+  background: linear-gradient(135deg, rgba(50, 205, 50, 0.5), rgba(34, 139, 34, 0.5));
+  border-color: #00ff00;
+  box-shadow: 0 0 20px rgba(50, 205, 50, 0.5);
+  transform: translateY(-2px);
+}
+.dashboard-button.primary:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* 炫酷的实时时间两行显示样式 */
+.datetime-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 15px 12px;
+  background: linear-gradient(135deg, rgba(0, 191, 255, 0.2) 0%, rgba(0, 119, 204, 0.2) 100%);
+  border: 2px solid rgba(0, 191, 255, 0.5);
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 191, 255, 0.3), inset 0 0 10px rgba(0, 191, 255, 0.1);
+  backdrop-filter: blur(5px);
+  margin-bottom: 30px;
+  width: 100%;
+  max-width: 220px;
+  position: relative;
+  overflow: hidden;
+  animation: timePulse 3s ease-in-out infinite alternate;
+}
+
+/* 炫酷背景效果 */
+.datetime-display::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(0, 191, 255, 0.05),
+    rgba(0, 191, 255, 0.05) 10px,
+    rgba(0, 191, 255, 0.03) 10px,
+    rgba(0, 191, 255, 0.03) 20px
+  );
+  animation: gridMove 8s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes gridMove {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(20px, 20px); }
+}
+
+@keyframes timePulse {
+  from {
+    box-shadow: 0 0 20px rgba(0, 191, 255, 0.3), inset 0 0 10px rgba(0, 191, 255, 0.1);
+  }
+  to {
+    box-shadow: 0 0 30px rgba(0, 191, 255, 0.5), inset 0 0 15px rgba(0, 191, 255, 0.2);
+  }
+}
+
+.date-line {
+  font-size: 18px;
+  color: #00bfff;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 1px;
+  text-shadow: 0 0 8px rgba(0, 191, 255, 0.7);
+  animation: textGlow 2s ease-in-out infinite alternate;
+  position: relative;
+  z-index: 1;
+}
+
+.time-line {
+  font-size: 24px;
+  color: #ffffff;
+  font-weight: bold;
+  letter-spacing: 2px;
+  font-family: 'Courier New', monospace;
+  text-shadow: 0 0 12px rgba(0, 191, 255, 0.9), 0 0 24px rgba(0, 191, 255, 0.5);
+  animation: timeGlow 1.5s ease-in-out infinite alternate;
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes textGlow {
+  from { text-shadow: 0 0 8px rgba(0, 191, 255, 0.7); }
+  to { text-shadow: 0 0 15px rgba(0, 191, 255, 0.9); }
+}
+
+@keyframes timeGlow {
+  from {
+    text-shadow: 0 0 12px rgba(0, 191, 255, 0.9), 0 0 24px rgba(0, 191, 255, 0.5);
+  }
+  to {
+    text-shadow: 0 0 18px rgba(0, 191, 255, 1), 0 0 36px rgba(0, 191, 255, 0.8), 0 0 48px rgba(0, 191, 255, 0.6);
+  }
 }
 .dashboard-button.secondary {
-  background: linear-gradient(135deg, rgba(50, 205, 50, 0.1), rgba(34, 139, 34, 0.1));
-  border-color: #228b22;
+  /* 系统启动、停机、故障复位按钮 - 相对不明显的样式 */
+  background: linear-gradient(135deg, rgba(0, 191, 255, 0.1), rgba(0, 119, 204, 0.1));
+  border-color: #0077cc;
+  color: #b0c4de;
 }
 .dashboard-button.secondary:hover {
-  background: linear-gradient(135deg, rgba(50, 205, 50, 0.2), rgba(34, 139, 34, 0.2));
-  border-color: #32cd32;
+  background: linear-gradient(135deg, rgba(0, 191, 255, 0.2), rgba(0, 119, 204, 0.2));
+  border-color: #00bfff;
+  color: #ffffff;
 }
 /* 数据列表样式（新增状态色） */
 .data-lists-container {
@@ -777,6 +942,8 @@ export default {
   width: 100%;
   height: 100%;
   position: relative;
+  display: flex;
+  align-items: center;
 }
 
 /* 数据点覆盖层 */
@@ -787,6 +954,7 @@ export default {
   right: 0;
   bottom: 0;
   pointer-events: none;
+  transform: translateX(0%);
 }
 
 /* 数据点样式 */
@@ -1044,16 +1212,29 @@ export default {
   .trend-plot text {
     font-size: 9px;
   }
-}
-@media (max-width: 768px) {
-  .main-content {
+  .bottom-section {
     flex-direction: column;
   }
-  .left-section, .right-section {
+  .bottom-left, .bottom-right {
     width: 100%;
   }
-  .button-container {
-    gap: 50px;
+}
+@media (max-width: 768px) {
+  .top-section {
+    flex-direction: column;
+  }
+  .left-controls, .central-image-container, .right-controls {
+    width: 100%;
+  }
+  .central-image-container {
+    height: 40%;
+    min-height: 250px;
+  }
+  .bottom-section {
+    flex-direction: column;
+  }
+  .bottom-left, .bottom-right {
+    width: 100%;
   }
   .gauge-charts-container {
     grid-template-columns: repeat(2, 1fr);
