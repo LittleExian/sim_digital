@@ -31,101 +31,42 @@
           <!-- 顶层数据点层 -->
           <div class="data-points-overlay">
             <!-- 冷却水供水温度 -->
-             <div class="data-point" style="left: 70.5%; top: 40%;" :class="{ 'alert': currentSystemState === 'shutdown' }" @click.stop="toggleDataLabels('coolingWaterSupplyTemperature')">
-               <div class="data-point-wrapper">
-                 <div class="data-point-circle"></div>
-                 <div class="data-point-content">
-                   <div class="data-point-label" v-if="dataPointsVisibility.coolingWaterSupplyTemperature">
-                     <div class="data-point-title">冷却水供水温度</div>
-                     <div class="data-point-value">{{ systemData[currentSystemState].lithium.coolInTemp }}</div>
-                   </div>
-                 </div>
-               </div>
-             </div>
+            <div class="data-value-display" style="left: 70.5%; top: 40%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
+              <div class="data-value">{{ systemData[currentSystemState].lithium.coolInTemp }}</div>
+            </div>
 
-             <!-- 冷却水回水温度 -->
-             <div class="data-point" style="left: 82%; top: 42%;" :class="{ 'alert': currentSystemState === 'shutdown' }" @click.stop="toggleDataLabels('coolingWaterReturnTemperature')">
-               <div class="data-point-wrapper">
-                 <div class="data-point-circle"></div>
-                 <div class="data-point-content">
-                   <div class="data-point-label" v-if="dataPointsVisibility.coolingWaterReturnTemperature">
-                     <div class="data-point-title">冷却水回水温度</div>
-                     <div class="data-point-value">{{ systemData[currentSystemState].lithium.coolOutTemp }}</div>
-                   </div>
-                 </div>
-               </div>
-             </div>
+            <!-- 冷却水回水温度 -->
+            <div class="data-value-display" style="left: 82%; top: 42%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
+              <div class="data-value">{{ systemData[currentSystemState].lithium.coolOutTemp }}</div>
+            </div>
 
-             <!-- 冷水供水温度 -->
-             <div class="data-point" style="left: 64.5%; top: 55%;" :class="{ 'alert': currentSystemState === 'shutdown' }" @click.stop="toggleDataLabels('coldWaterSupplyTemperature')">
-               <div class="data-point-wrapper">
-                 <div class="data-point-circle"></div>
-                 <div class="data-point-content">
-                   <div class="data-point-label" v-if="dataPointsVisibility.coldWaterSupplyTemperature">
-                     <div class="data-point-title">冷水供水温度</div>
-                     <div class="data-point-value">{{ systemData[currentSystemState].lithium.coldInTemp }}</div>
-                   </div>
-                 </div>
-               </div>
-             </div>
+            <!-- 冷水供水温度 -->
+            <div class="data-value-display" style="left: 64.5%; top: 55%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
+              <div class="data-value">{{ systemData[currentSystemState].lithium.coldInTemp }}</div>
+            </div>
 
-             <!-- 冷水回水温度 -->
-             <div class="data-point" style="left: 69.5%; top: 75%;" :class="{ 'alert': currentSystemState === 'shutdown' }" @click.stop="toggleDataLabels('coldWaterReturnTemperature')">
-               <div class="data-point-wrapper">
-                 <div class="data-point-circle"></div>
-                 <div class="data-point-content">
-                   <div class="data-point-label" v-if="dataPointsVisibility.coldWaterReturnTemperature">
-                     <div class="data-point-title">冷水回水温度</div>
-                     <div class="data-point-value">{{ systemData[currentSystemState].lithium.coldOutTemp }}</div>
-                   </div>
-                 </div>
-               </div>
-             </div>
+            <!-- 冷水回水温度 -->
+            <div class="data-value-display" style="left: 69.5%; top: 75%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
+              <div class="data-value">{{ systemData[currentSystemState].lithium.coldOutTemp }}</div>
+            </div>
 
-             <!-- 热水入口温度 -->
-             <div class="data-point" style="left: 36%; top: 29.5%;" :class="{ 'alert': currentSystemState === 'shutdown' }" @click.stop="toggleDataLabels('hotWaterSupplyTemperature')">
-               <div class="data-point-wrapper">
-                 <div class="data-point-circle"></div>
-                 <div class="data-point-content">
-                   <div class="data-point-label" v-if="dataPointsVisibility.hotWaterSupplyTemperature">
-                     <div class="data-point-title">热水入口温度</div>
-                     <div class="data-point-value">{{ systemData[currentSystemState].lithium.hotInTemp }}</div>
-                   </div>
-                 </div>
-               </div>
-             </div>
+            <!-- 热水入口温度 -->
+            <div class="data-value-display" style="left: 36%; top: 29.5%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
+              <div class="data-value">{{ systemData[currentSystemState].lithium.hotInTemp }}</div>
+            </div>
 
-             <!-- 热水出口温度 -->
-             <div class="data-point" style="left: 36%; top: 34%;" :class="{ 'alert': currentSystemState === 'shutdown' }" @click.stop="toggleDataLabels('hotWaterReturnTemperature')">
-               <div class="data-point-wrapper">
-                 <div class="data-point-circle"></div>
-                 <div class="data-point-content">
-                   <div class="data-point-label" v-if="dataPointsVisibility.hotWaterReturnTemperature">
-                     <div class="data-point-title">热水出口温度</div>
-                     <div class="data-point-value">{{ systemData[currentSystemState].lithium.hotOutTemp }}</div>
-                   </div>
-                 </div>
-               </div>
-             </div>
+            <!-- 热水出口温度 -->
+            <div class="data-value-display" style="left: 36%; top: 34%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
+              <div class="data-value">{{ systemData[currentSystemState].lithium.hotOutTemp }}</div>
+            </div>
 
-             <!-- 发电机参数 -->
-             <div class="data-point" style="left: 20%; top: 20%;" :class="{ 'alert': currentSystemState === 'shutdown' }" @click.stop="toggleDataLabels('generatorVoltage')">
-               <div class="data-point-wrapper">
-                 <div class="data-point-circle"></div>
-                 <div class="data-point-content">
-                   <div class="data-point-label" v-if="dataPointsVisibility.generatorVoltage">
-                     <div class="data-point-title">发电Uab</div>
-                     <div class="data-point-value">{{ systemData[currentSystemState].generator.Uab }}</div>
-                     <div class="data-point-title">A相电流</div>
-                     <div class="data-point-value">{{ systemData[currentSystemState].generator.currentA }}</div>
-                     <div class="data-point-title">总有功功率</div>
-                     <div class="data-point-value">{{ systemData[currentSystemState].generator.powerTotal }}</div>
-                     <div class="data-point-title">总无功功率</div>
-                     <div class="data-point-value">{{ systemData[currentSystemState].generator.reactiveTotal }}</div>
-                   </div>
-                 </div>
-               </div>
-             </div>
+            <!-- 发电机参数 -->
+            <div class="data-value-display" style="left: 28%; top: 47%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
+              <div class="data-value" style="display: flex; justify-content: space-around; gap: 20px;"> 发电Uab <span style="text-align: right;">{{systemData[currentSystemState].generator.Uab }}</span></div>
+              <div class="data-value" style="display: flex; justify-content: space-around; gap: 20px;"> A相电流 <span style="text-align: right;">{{ systemData[currentSystemState].generator.currentA }}</span></div>
+              <div class="data-value" style="display: flex; justify-content: space-between; gap: 20px;">总有功功率 <span style="text-align: right;">{{ systemData[currentSystemState].generator.powerTotal }}</span></div>
+              <div class="data-value" style="display: flex; justify-content: space-between; gap: 20px;">总无功功率 <span style="text-align: right;">{{ systemData[currentSystemState].generator.reactiveTotal }}</span></div>
+            </div>
           </div>
         </div>
         
@@ -1006,143 +947,63 @@ body {
   transform: translateX(0%);
 }
 
-/* 数据点样式 */
-.data-point {
+/* 数据值显示样式 */
+.data-value-display {
   position: absolute;
   transform: translate(-50%, -50%);
   pointer-events: auto;
   z-index: 10;
+  white-space: nowrap;
+  text-align: center;
 }
 
-/* 数据点圆形 */
-.data-point-circle {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background-color: #00bfff;
-  box-shadow: 0 0 10px rgba(0, 191, 255, 0.8);
-  animation: pulse 2s infinite;
-  border: 2px solid rgba(255, 255, 255, 0.8);
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-/* 数据点脉冲动画 */
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-    box-shadow: 0 0 10px rgba(0, 191, 255, 0.8);
-  }
-  50% {
-    transform: scale(1.2);
-    box-shadow: 0 0 15px rgba(0, 191, 255, 1);
-  }
-  100% {
-    transform: scale(1);
-    box-shadow: 0 0 10px rgba(0, 191, 255, 0.8);
-  }
-}
-
-/* 数据点内容容器 */
-.data-point-content {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-/* 数据点标签 */
-   .data-point-label {
-     background: rgba(10, 40, 60, 0.9);
-     border: 1px solid rgba(0, 191, 255, 0.5);
-     border-radius: 5px;
-     padding: 6px 10px;
-     backdrop-filter: blur(5px);
-     white-space: nowrap;
-     opacity: 1;
-     transform: translateX(0);
-     transition: all 0.3s ease;
-     pointer-events: none;
-     display: flex;
-     flex-direction: column;
-     justify-content: center;
-     align-items: center;
-     min-width: 80px;
-     position: absolute;
-     left: 100%;
-     top: 50%;
-     transform: translateY(-50%);
-     margin-left: 30px;
-     z-index: 11;
-   }
-
-/* 数据点包装器 */
-.data-point-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-/* 点击区域扩大 */
-.data-point {
-  cursor: pointer;
-  width: 20px;
-  height: 20px;
-}
-
-/* 数据点标题 */
-.data-point-title {
+/* 数据值样式 */
+.data-value {
   font-size: 12px;
-  color: #b0c4de;
-  margin-top: 2px;
-  margin-bottom: 2px;
+  font-weight: normal;
+  color: #d0d0d0;
 }
 
-/* 数据点值 */
-.data-point-value {
-  font-size: 14px;
-  font-weight: bold;
-  color: #ffffff;
-  margin-bottom: 2px;
-}
-
-/* 数据点异常状态 */
-.data-point.alert .data-point-circle {
-  background-color: #ff6b6b;
-  box-shadow: 0 0 10px rgba(255, 107, 107, 0.8);
-}
-
-/* 数据点警告状态动画 */
-.data-point.alert .data-point-circle {
+/* 数据值异常状态（停机） */
+.data-value-display.alert {
   animation: alertPulse 1s infinite;
+}
+
+.data-value-display.alert .data-value {
+  color: #a0d2eb;
+}
+
+/* 数据值正常状态（运行） */
+.data-value-display.running {
+  animation: runningPulse 1s infinite;
+}
+
+.data-value-display.running .data-value {
+  color: #ffffff;
 }
 
 @keyframes alertPulse {
   0% {
-    transform: scale(1);
-    box-shadow: 0 0 10px rgba(255, 107, 107, 0.8);
+    text-shadow: 0 0 5px rgba(160, 210, 235, 0.5);
   }
   50% {
-    transform: scale(1.3);
-    box-shadow: 0 0 20px rgba(255, 107, 107, 1);
+    text-shadow: 0 0 15px rgba(160, 210, 235, 0.8);
   }
   100% {
-    transform: scale(1);
-    box-shadow: 0 0 10px rgba(255, 107, 107, 0.8);
+    text-shadow: 0 0 5px rgba(160, 210, 235, 0.5);
   }
 }
 
-/* 数据点悬停效果 */
-.data-point:hover .data-point-circle {
-  transform: scale(1.5);
-  box-shadow: 0 0 20px rgba(0, 191, 255, 1);
-  animation-play-state: paused;
-}
-
-.data-point.alert:hover .data-point-circle {
-  box-shadow: 0 0 20px rgba(255, 107, 107, 1);
+@keyframes runningPulse {
+  0% {
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+  }
+  50% {
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+  }
+  100% {
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+  }
 }
 .placeholder-image {
   width: 100%;
