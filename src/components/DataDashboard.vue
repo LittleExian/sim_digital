@@ -32,8 +32,21 @@
         <div class="equipment-image-wrapper">
           <!-- 3D模型容器 -->
           <div ref="modelContainer" style="width: 100%; height: 100%; position: absolute;"></div>
-          <!-- 备用图片 -->
-          <img ref="fallbackImage" src="/equipment.jpg" alt="三联供系统设备示意图" style="width: 100%; height: 100%; object-fit: fill;">
+          <!-- 模型加载提示 -->
+          <div v-if="!model" ref="loadingIndicator" style="
+            width: 100%; 
+            height: 100%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            position: absolute; 
+            background-color: #0a1929;
+            color: white; 
+            font-size: 18px; 
+            font-weight: bold;
+          ">
+            模型加载中，请稍候...
+          </div>
           
           <!-- 顶层数据点层 -->
           <!-- <div class="data-points-overlay"> -->
@@ -873,18 +886,15 @@ export default {
           
           this.scene.add(this.model);
           
-          // 隐藏备用图片
-          if (this.$refs.fallbackImage) {
-            this.$refs.fallbackImage.style.display = 'none';
-          }
-          
-          // 添加鼠标交互功能
-          this.addMouseInteraction();
-          
-          console.log('3D模型加载成功，已适配容器大小，支持鼠标缩放和旋转');
-          
-          // 渲染一次
-          this.renderer.render(this.scene, this.camera);
+          // 模型已加载，Vue的v-if会自动隐藏加载提示
+            
+            // 添加鼠标交互功能
+            this.addMouseInteraction();
+            
+            console.log('3D模型加载成功，已适配容器大小，支持鼠标缩放和旋转');
+            
+            // 渲染一次
+            this.renderer.render(this.scene, this.camera);
         },
         (xhr) => {
           // 加载进度
@@ -893,10 +903,8 @@ export default {
         (error) => {
           // 加载错误
           console.error('3D模型加载失败:', error);
-          // 确保备用图片可见
-          if (this.$refs.fallbackImage) {
-            this.$refs.fallbackImage.style.display = 'block';
-          }
+          // 可以在这里添加错误提示，但由于v-if="!model"，加载提示会一直显示
+          // 可以考虑修改加载提示文本或添加错误状态
         }
       );
       
@@ -966,27 +974,51 @@ export default {
       if (!this.$refs.modelContainer) return;
       
       let isDragging = false;
+      let isCtrlPressed = false;
       let previousMousePosition = { x: 0, y: 0 };
       
-      // 鼠标按下事件 - 开始拖拽旋转
+      // 监听Ctrl键按下和释放事件
+      window.addEventListener('keydown', (event) => {
+        if (event.key === 'Control' || event.key === 'Ctrl') {
+          isCtrlPressed = true;
+        }
+      });
+      
+      window.addEventListener('keyup', (event) => {
+        if (event.key === 'Control' || event.key === 'Ctrl') {
+          isCtrlPressed = false;
+        }
+      });
+      
+      // 鼠标按下事件 - 开始拖拽
       this.$refs.modelContainer.addEventListener('mousedown', (event) => {
         isDragging = true;
         previousMousePosition = { x: event.clientX, y: event.clientY };
       });
       
-      // 鼠标移动事件 - 处理旋转
+      // 鼠标移动事件 - 处理旋转或平移
       this.$refs.modelContainer.addEventListener('mousemove', (event) => {
         if (!isDragging || !this.model) return;
         
         const deltaX = event.clientX - previousMousePosition.x;
         const deltaY = event.clientY - previousMousePosition.y;
         
-        // 旋转模型
-        this.model.rotation.y += deltaX * 0.005;
-        this.model.rotation.x += deltaY * 0.005;
-        
-        // 限制垂直旋转角度，避免过度旋转
-        this.model.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, this.model.rotation.x));
+        if (isCtrlPressed) {
+            // 按住Ctrl键时，平移模型
+            // 根据缩放比例调整平移速度
+            const scale = this.model.scale.x;
+            const moveSpeed = 0.005 * scale;
+            
+            this.model.position.x += deltaX * moveSpeed;
+            this.model.position.y -= deltaY * moveSpeed;
+          } else {
+          // 普通拖拽时，旋转模型
+          this.model.rotation.y += deltaX * 0.005;
+          this.model.rotation.x += deltaY * 0.005;
+          
+          // 限制垂直旋转角度，避免过度旋转
+          this.model.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, this.model.rotation.x));
+        }
         
         previousMousePosition = { x: event.clientX, y: event.clientY };
         this.renderer.render(this.scene, this.camera);
@@ -997,12 +1029,12 @@ export default {
         isDragging = false;
       });
       
-      // 鼠标滚轮事件 - 处理缩放（仅在按住鼠标左键时生效）
+      // 鼠标滚轮事件 - 处理缩放（仅在按住Ctrl键时生效）
       this.$refs.modelContainer.addEventListener('wheel', (event) => {
         event.preventDefault();
         
-        // 只有在按住鼠标左键时才执行缩放
-        if (!isDragging || !this.model) return;
+        // 只有在按住Ctrl键时才执行缩放
+        if (!isCtrlPressed || !this.model) return;
         
         // 根据滚轮方向调整缩放比例，增大缩放步长
         const scaleFactor = event.deltaY > 0 ? 0.8 : 1.25;
@@ -1018,6 +1050,8 @@ export default {
       });
     },
     
+
+    
     // 清理3D资源
     beforeUnmount() {
       if (this.renderer) {
@@ -1026,13 +1060,15 @@ export default {
       
       window.removeEventListener('resize', this.handleResize);
       
-      // 清理鼠标事件监听器
+      // 清理鼠标和键盘事件监听器
       if (this.$refs.modelContainer) {
         this.$refs.modelContainer.removeEventListener('mousedown', null);
         this.$refs.modelContainer.removeEventListener('mousemove', null);
         this.$refs.modelContainer.removeEventListener('wheel', null);
       }
       window.removeEventListener('mouseup', null);
+      window.removeEventListener('keydown', null);
+      window.removeEventListener('keyup', null);
     }
   }
 }
