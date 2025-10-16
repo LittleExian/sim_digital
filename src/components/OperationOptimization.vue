@@ -6,7 +6,7 @@
         <span class="back-icon">←</span>
         <span>返回仪表盘</span>
       </button>
-      <h1 class="page-title">三联供系统运行优化</h1>
+      <h1 class="page-title">冷热电联供综合能源系统数字孪生运维管控平台</h1>
     </div>
     <!-- 主内容区域 -->
     <div class="optimization-content">
@@ -19,17 +19,17 @@
         </div>
         <div class="status-card">
           <div class="status-title">当前综合能源利用率</div>
-          <div class="status-value">82.3%</div>
+          <div class="status-value">{{ efficiencyData.utilizationRate }}</div>
           <div class="status-change">+3.5%</div>
         </div>
         <div class="status-card">
           <div class="status-title">碳排放减少</div>
-          <div class="status-value">15.6 t/day</div>
+          <div class="status-value">{{ efficiencyData.carbonReduction }}</div>
           <div class="status-change">+2.1 t</div>
         </div>
         <div class="status-card">
           <div class="status-title">节能效益</div>
-          <div class="status-value">¥9,820/day</div>
+          <div class="status-value">{{ efficiencyData.energySaving }}</div>
           <div class="status-change">+¥1,680</div>
         </div>
       </div>
@@ -63,9 +63,9 @@
             <span class="param-value">{{ pumpFlow }}%</span>
           </div>
           <div class="param-group">
-            <label class="param-label">热水设定温度</label>
-            <input type="range" min="40" max="60" v-model="hotWaterTemp" class="param-slider">
-            <span class="param-value">{{ hotWaterTemp }}°C</span>
+            <label class="param-label">烟气设定温度</label>
+            <input type="range" min="280" max="300" v-model="smokeTemp" class="param-slider">
+            <span class="param-value">{{ smokeTemp }}°C</span>
           </div>
         </div>
         <button class="optimize-button" @click="runOptimization">
@@ -78,105 +78,105 @@
         <h2 class="section-title">实时监测数据</h2>
         <div class="data-tables">
           <div class="data-table">
-            <h3 class="table-title">微燃机数据</h3>
-            <table>
-              <tr>
-                <td class="data-label">转速</td>
-                <td class="data-value">12,500 rpm</td>
-              </tr>
-              <tr>
-                <td class="data-label">排气温度</td>
-                <td class="data-value">580°C</td>
-              </tr>
-              <tr>
-                <td class="data-label">燃气压力</td>
-                <td class="data-value">0.92 MPa</td>
-              </tr>
-              <tr>
-                <td class="data-label">无功功率</td>
-                <td class="data-value">12 kvar</td>
-              </tr>
-              <tr>
-                <td class="data-label">负载</td>
-                <td class="data-value">85%</td>
-              </tr>
-            </table>
-          </div>
+          <h3 class="table-title">微燃机数据</h3>
+          <table>
+            <tr>
+              <td class="data-label">转速</td>
+              <td class="data-value">{{ systemData.running.generator.speed }}</td>
+            </tr>
+            <tr>
+              <td class="data-label">排气温度</td>
+              <td class="data-value">{{ systemData.running.generator.exhaustTemp }}</td>
+            </tr>
+            <tr>
+              <td class="data-label">燃气压力</td>
+              <td class="data-value">0.75 MPa</td>
+            </tr>
+            <tr>
+              <td class="data-label">无功功率</td>
+              <td class="data-value">{{ systemData.running.generator.reactiveTotal }}</td>
+            </tr>
+            <tr>
+              <td class="data-label">负载</td>
+              <td class="data-value">82%</td>
+            </tr>
+          </table>
+        </div>
           <div class="data-table">
-            <h3 class="table-title">发电机数据</h3>
-            <table>
-              <tr>
-                <td class="data-label">发电功率</td>
-                <td class="data-value">1,250 kW</td>
-              </tr>
-              <tr>
-                <td class="data-label">输出电压</td>
-                <td class="data-value">6,300 V</td>
-              </tr>
-              <tr>
-                <td class="data-label">输出电流</td>
-                <td class="data-value">115 A</td>
-              </tr>
-              <tr>
-                <td class="data-label">有功功率</td>
-                <td class="data-value">1,220 kW</td>
-              </tr>
-              <tr>
-                <td class="data-label">累计电量</td>
-                <td class="data-value">1,850 Kwh</td>
-              </tr>
-            </table>
-          </div>
+          <h3 class="table-title">发电机数据</h3>
+          <table>
+            <tr>
+              <td class="data-label">发电功率</td>
+              <td class="data-value">{{ systemData.running.generator.powerTotal }}</td>
+            </tr>
+            <tr>
+              <td class="data-label">输出电压</td>
+              <td class="data-value">{{ systemData.running.generator.Uab }}</td>
+            </tr>
+            <tr>
+              <td class="data-label">输出电流</td>
+              <td class="data-value">{{ systemData.running.generator.currentA }}</td>
+            </tr>
+            <tr>
+              <td class="data-label">有功功率</td>
+              <td class="data-value">{{ systemData.running.generator.powerTotal }}</td>
+            </tr>
+            <tr>
+              <td class="data-label">累计电量</td>
+              <td class="data-value">{{ systemData.running.generator.totalPower }}</td>
+            </tr>
+          </table>
+        </div>
           <div class="data-table">
-            <h3 class="table-title">溴化锂机组数据</h3>
-            <table>
-              <tr>
-                <td class="data-label">冷水温度</td>
-                <td class="data-value">7.2°C</td>
-              </tr>
-              <tr>
-                <td class="data-label">温水温度</td>
-                <td class="data-value">14.8°C</td>
-              </tr>
-              <tr>
-                <td class="data-label">蒸汽压力</td>
-                <td class="data-value">0.75 MPa</td>
-              </tr>
-              <tr>
-                <td class="data-label">制冷量</td>
-                <td class="data-value">850 RT</td>
-              </tr>
-              <tr>
-                <td class="data-label">补水状态</td>
-                <td class="data-value">开阀（稳定）</td>
-              </tr>
-            </table>
-          </div>
+          <h3 class="table-title">溴化锂机组数据</h3>
+          <table>
+            <tr>
+              <td class="data-label">冷水温度</td>
+              <td class="data-value">{{ systemData.running.lithium.coldInTemp }}</td>
+            </tr>
+            <tr>
+              <td class="data-label">温水温度</td>
+              <td class="data-value">{{ systemData.running.lithium.coldOutTemp }}</td>
+            </tr>
+            <tr>
+              <td class="data-label">蒸汽压力</td>
+              <td class="data-value">{{ systemData.running.lithium.evaporatorPress }}</td>
+            </tr>
+            <tr>
+              <td class="data-label">制冷量</td>
+              <td class="data-value">650.0 RT</td>
+            </tr>
+            <tr>
+              <td class="data-label">补水状态</td>
+              <td class="data-value">{{ systemData.running.lithium.startState }}（运行时）</td>
+            </tr>
+          </table>
+        </div>
           <div class="data-table">
-            <h3 class="table-title">水泵/热水系统数据</h3>
-            <table>
-              <tr>
-                <td class="data-label">水泵扬程</td>
-                <td class="data-value">32 m</td>
-              </tr>
-              <tr>
-                <td class="data-label">水泵流量</td>
-                <td class="data-value">180 m³/h</td>
-              </tr>
-              <tr>
-                <td class="data-label">热水温度</td>
-                <td class="data-value">52°C</td>
-              </tr>
-              <tr>
-                <td class="data-label">储水罐压力</td>
-                <td class="data-value">0.45 MPa</td>
-              </tr>
-              <tr>
-                <td class="data-label">板换进出口温差</td>
-                <td class="data-value">8°C</td>
-              </tr>
-            </table>
-          </div>
+          <h3 class="table-title">水泵/烟气系统数据</h3>
+          <table>
+            <tr>
+              <td class="data-label">水泵扬程</td>
+              <td class="data-value">28.0 m</td>
+            </tr>
+            <tr>
+              <td class="data-label">水泵流量</td>
+              <td class="data-value">150.0 m³/h</td>
+            </tr>
+            <tr>
+              <td class="data-label">烟气温度</td>
+              <td class="data-value">{{ systemData.running.lithium.smokeInTemp }}</td>
+            </tr>
+            <tr>
+              <td class="data-label">储水罐压力</td>
+              <td class="data-value">0.55 MPa</td>
+            </tr>
+            <tr>
+              <td class="data-label">板换进出口温差</td>
+              <td class="data-value">4.4°C</td>
+            </tr>
+          </table>
+        </div>
         </div>
       </div>
       <!-- 优化结果与建议（完整覆盖文档优化措施） -->
@@ -207,10 +207,10 @@
           <div class="optimization-suggestions">
             <h3 class="suggestions-title">核心优化建议</h3>
             <ul class="suggestions-list">
-              <li>微燃机负载调整至85%（当前85%），可最大化发电效率，同时为溴化锂机组提供充足余热</li>
-              <li>溴化锂机组蒸汽压力降至0.75MPa（原0.8MPa），减少燃气消耗，同时保证制冷量稳定</li>
+              <li>微燃机负载保持在82%（当前82%），当前运行效率良好，可最大化发电效率，同时为溴化锂机组提供充足余热</li>
+              <li>溴化锂机组蒸汽压力保持在0.69MPa（当前0.69MPa），运行稳定，可保持当前参数</li>
               <li>水泵流量设定为90%（当前90%），匹配主机需求，避免流量过剩导致能耗浪费</li>
-              <li>热水温度设定52°C（原48°C），满足使用需求且避免过度耗能，储水罐每月除垢1次</li>
+              <li>烟气温度保持在288.8°C（当前288.8°C），满足系统需求，定期检查烟气管道</li>
               <li>每周清洗Y型过滤器1次（运行初期），每月1次常规清洗，避免水系统堵塞</li>
               <li>系统最高点自动排气阀每日检查1次，每周手动排气1次，彻底排除管道空气</li>
               <li>空调末端风盘滤网每45天清洗1次，同步对风盘手动排气，解决室温不均问题</li>
@@ -235,12 +235,157 @@ export default {
       heatingPriority: 15,
       gasLimit: 110,
       pumpFlow: 90,
-      hotWaterTemp: 52
+      smokeTemp: 290,
+      // 系统状态数据 - 与DataDashboard保持一致
+      systemData: {
+        running: {
+            powerGrid: {
+              Uab: '401.2v',
+              Ubc: '402.5v',
+              Uca: '399.5v'
+            },
+            generator: {
+              Uab: '401.0v',
+              UabValue: 401.0,
+              currentA: '80.9A',
+              currentAValue: 80.9,
+              powerTotal: '55.7kw',
+              powerTotalValue: 55.7,
+              reactiveTotal: '16.8kvar',
+              frequency: '49.9Hz',
+              frequencyValue: 49.9,
+              speed: '2998.0 r/min',
+              exhaustTemp: '418.5℃',
+              gridSwitch: '合闸',
+              totalPower: '130012.5 kwh',
+              totalGas: '15265.2 m³'
+            },
+          lithium: {
+            coldInTemp: '8.5℃',
+            coldInTempValue: 8.5,
+            coldOutTemp: '12.6℃',
+            smokeInTemp: '288.8℃',
+            smokeInTempValue: 288.8,
+            smokeOutTemp: '152.5℃',
+            coolInTemp: '25.6℃',
+            coolOutTemp: '29.0℃',
+            evaporatorTemp: '6.5℃',
+            evaporatorPress: '0.69Mpa',
+            startState: '停机'
+          }
+        }
+      },
+      // 当前系统状态
+      currentSystemState: 'running',
+      // 能源效率和碳排放数据
+      efficiencyData: {
+        utilizationRate: '82.3%',
+        carbonReduction: '15.6 t/day',
+        energySaving: '¥9,820/day'
+      }
+    }
+  },
+  mounted() {
+    // 添加实时数据更新定时器，每1分钟更新一次，与DataDashboard保持同步
+    this.updateTimer = setInterval(() => this.updateRealTimeData(), 2000);
+  },
+  beforeUnmount() {
+    // 清除定时器，避免内存泄漏
+    if (this.updateTimer) {
+      clearInterval(this.updateTimer);
     }
   },
   methods: {
     goBack() {
       this.$router.push('/')
+    },
+    // 更新实时数据，与DataDashboard保持一致的更新逻辑，部分数据项可能保持不变
+    updateRealTimeData() {
+      // 只有在系统运行状态下才更新数据
+      if (this.currentSystemState === 'running') {
+        const runningData = this.systemData.running;
+        
+        // 基础变化幅度因子
+        const baseChangeFactor = 0.3 + Math.random() * 0.5;
+        
+        // 更新generator数据
+        // 电流：在80.0-81.5A之间波动，85%概率变化，变化较为频繁
+        if (Math.random() < 0.85) {
+          const currentChange = (Math.random() > 0.5 ? 1 : -1) * baseChangeFactor * 3;
+          const newCurrentA = Math.max(80.0, Math.min(81.5, runningData.generator.currentAValue + currentChange));
+          runningData.generator.currentAValue = parseFloat(newCurrentA.toFixed(1));
+          runningData.generator.currentA = `${runningData.generator.currentAValue}A`;
+        }
+        
+        // 总有功功率：在55.0-56.5kW之间波动，85%概率变化，与电流有一定相关性但不完全同步
+        if (Math.random() < 0.85) {
+          const powerChange = (Math.random() > 0.52 ? 1 : -1) * baseChangeFactor * 5;
+          const newPowerTotal = Math.max(55.0, Math.min(56.5, runningData.generator.powerTotalValue + powerChange));
+          runningData.generator.powerTotalValue = parseFloat(newPowerTotal.toFixed(1));
+          runningData.generator.powerTotal = `${runningData.generator.powerTotalValue}kw`;
+        }
+        
+        // 发电机电压：在400.0-402.0V之间波动，65%概率变化，变化相对平缓
+        if (Math.random() < 0.65) {
+          const generatorVoltageChange = (Math.random() > 0.6 ? 1 : -1) * baseChangeFactor * 0.6;
+          const newGenUab = Math.max(400.0, Math.min(402.0, runningData.generator.UabValue + generatorVoltageChange));
+          runningData.generator.UabValue = parseFloat(newGenUab.toFixed(1));
+          runningData.generator.Uab = `${runningData.generator.UabValue}v`;
+        }
+        
+        // 无功功率：在16.0-17.5kvar之间波动，70%概率变化，独立变化
+        if (Math.random() < 0.7) {
+          const reactiveChange = (Math.random() > 0.48 ? 1 : -1) * baseChangeFactor * 1.5;
+          const newReactiveTotal = Math.max(16.0, Math.min(17.5, parseFloat(runningData.generator.reactiveTotal) + reactiveChange));
+          runningData.generator.reactiveTotal = `${newReactiveTotal.toFixed(1)}kvar`;
+        }
+        
+        // 转速：在2995-3000 r/min之间波动，50%概率变化，变化缓慢且稳定
+        if (Math.random() < 0.5) {
+          const speedChange = (Math.random() > 0.6 ? 1 : -1) * Math.floor(baseChangeFactor * 5);
+          const newSpeed = Math.max(2995, Math.min(3000, parseInt(runningData.generator.speed)) + speedChange);
+          runningData.generator.speed = `${newSpeed.toFixed(1)} r/min`;
+        }
+        
+        // 排气温度：在417.0-420.0℃之间波动，75%概率变化，与功率变化有一定相关性
+        if (Math.random() < 0.75) {
+          const exhaustTempChange = (Math.random() > 0.53 ? 1 : -1) * baseChangeFactor * 3;
+          const newExhaustTemp = Math.max(417.0, Math.min(420.0, parseFloat(runningData.generator.exhaustTemp) + exhaustTempChange));
+          runningData.generator.exhaustTemp = `${newExhaustTemp.toFixed(1)}℃`;
+        }
+        
+        // 更新lithium数据
+        // 冷水温度：在8.0-9.0℃之间波动，70%概率变化，独立变化
+        if (Math.random() < 0.7) {
+          const coldTempChange = (Math.random() > 0.55 ? -1 : 1) * baseChangeFactor * 0.8; // 冷水温度变化方向特殊
+          const newColdTemp = Math.max(8.0, Math.min(9.0, runningData.lithium.coldInTempValue + coldTempChange));
+          runningData.lithium.coldInTempValue = parseFloat(newColdTemp.toFixed(1));
+          runningData.lithium.coldInTemp = `${runningData.lithium.coldInTempValue}℃`;
+        }
+        
+        // 烟气温度：在280.0-300.0℃之间波动，60%概率变化，独立变化
+        if (Math.random() < 0.6) {
+          const smokeTempChange = (Math.random() > 0.52 ? 1 : -1) * baseChangeFactor * 5;
+          const newSmokeTemp = Math.max(280.0, Math.min(300.0, runningData.lithium.smokeInTempValue + smokeTempChange));
+          runningData.lithium.smokeInTempValue = parseFloat(newSmokeTemp.toFixed(1));
+          runningData.lithium.smokeInTemp = `${runningData.lithium.smokeInTempValue}℃`;
+        }
+        
+        // 更新累计数据（持续增长）
+        // 累计电量增加10-30kWh
+        const totalPowerIncrease = 10 + Math.random() * 20;
+        const newTotalPower = parseFloat(runningData.generator.totalPower) + totalPowerIncrease;
+        runningData.generator.totalPower = `${newTotalPower.toFixed(1)} kwh`;
+        
+        // 根据数据变化，轻微调整效率指标（随机调整）
+        if (Math.random() > 0.7) {
+          const rateChange = parseFloat(this.efficiencyData.utilizationRate) + (Math.random() > 0.5 ? 0.1 : -0.1);
+          this.efficiencyData.utilizationRate = `${Math.max(80, Math.min(85, rateChange)).toFixed(1)}%`;
+        }
+        
+        // 控制台日志，显示数据更新状态
+        console.log('OperationOptimization数据已更新，部分数据项保持不变以创建更自然的曲线形态');
+      }
     },
     // 运行优化（模拟文档优化逻辑）
     runOptimization() {
@@ -252,7 +397,7 @@ export default {
         this.coolingPriority = 20;
         this.heatingPriority = 10;
         this.pumpFlow = 88;
-        alert('优化计算已完成！\n效果提升：\n- 综合能源利用率从78.5%提升至82.3%\n- 燃气消耗降低4.2%（微燃机+溴化锂机组）\n- 水泵能耗降低6.5%（流量优化）\n- 热水供应稳定性提升15%（温度+压力优化）');
+        alert('优化计算已完成！\n效果提升：\n- 综合能源利用率从78.5%提升至82.3%\n- 燃气消耗降低4.2%（微燃机+溴化锂机组）\n- 水泵能耗降低6.5%（流量优化）\n- 烟气系统稳定性提升15%（温度+压力优化）');
       }, 2500)
     }
   }

@@ -1,5 +1,10 @@
 <template>
   <div class="dashboard-container">
+    <!-- 主标题区域 -->
+    <div class="dashboard-title">
+      <h1>冷热电联供综合能源系统数字孪生运维管控平台</h1>
+    </div>
+    
     <!-- 顶部区域：图片和控制按钮 -->
     <div class="top-section">
       <!-- 左侧控制区 -->
@@ -25,49 +30,51 @@
       <!-- 中央图片区域（占3/5） -->
       <div class="central-image-container">
         <div class="equipment-image-wrapper">
-          <!-- 底层图片 -->
-          <img src="/equipment.png" alt="三联供系统设备示意图" style="width: 100%; height: 100%; object-fit: fill;">
+          <!-- 3D模型容器 -->
+          <div ref="modelContainer" style="width: 100%; height: 100%; position: absolute;"></div>
+          <!-- 备用图片 -->
+          <img ref="fallbackImage" src="/equipment.jpg" alt="三联供系统设备示意图" style="width: 100%; height: 100%; object-fit: fill;">
           
           <!-- 顶层数据点层 -->
-          <div class="data-points-overlay">
+          <!-- <div class="data-points-overlay"> -->
             <!-- 冷却水供水温度 -->
-            <div class="data-value-display" style="left: 70.5%; top: 40%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
+            <!-- <div class="data-value-display" style="left: 69%; top: 43%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
               <div class="data-value">{{ systemData[currentSystemState].lithium.coolInTemp }}</div>
-            </div>
+            </div> -->
 
             <!-- 冷却水回水温度 -->
-            <div class="data-value-display" style="left: 82%; top: 42%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
+            <!-- <div class="data-value-display" style="left: 75%; top: 43%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
               <div class="data-value">{{ systemData[currentSystemState].lithium.coolOutTemp }}</div>
-            </div>
+            </div> -->
 
             <!-- 冷水供水温度 -->
-            <div class="data-value-display" style="left: 64.5%; top: 55%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
+            <!-- <div class="data-value-display" style="left: 61%; top: 55%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
               <div class="data-value">{{ systemData[currentSystemState].lithium.coldInTemp }}</div>
-            </div>
+            </div> -->
 
             <!-- 冷水回水温度 -->
-            <div class="data-value-display" style="left: 69.5%; top: 75%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
+            <!-- <div class="data-value-display" style="left: 66%; top: 55%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
               <div class="data-value">{{ systemData[currentSystemState].lithium.coldOutTemp }}</div>
-            </div>
+            </div> -->
 
-            <!-- 热水入口温度 -->
-            <div class="data-value-display" style="left: 36%; top: 29.5%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
-              <div class="data-value">{{ systemData[currentSystemState].lithium.hotInTemp }}</div>
-            </div>
+            <!-- 烟气进口温度 -->
+            <!-- <div class="data-value-display" style="left: 54%; top: 40.5%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
+              <div class="data-value">{{ systemData[currentSystemState].lithium.smokeInTemp }}</div>
+            </div> -->
 
-            <!-- 热水出口温度 -->
-            <div class="data-value-display" style="left: 36%; top: 34%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
-              <div class="data-value">{{ systemData[currentSystemState].lithium.hotOutTemp }}</div>
-            </div>
+            <!-- 烟气出口温度 -->
+            <!-- <div class="data-value-display" style="left: 54%; top: 30.5%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
+              <div class="data-value">{{ systemData[currentSystemState].lithium.smokeOutTemp }}</div>
+            </div> -->
 
             <!-- 发电机参数 -->
-            <div class="data-value-display" style="left: 28%; top: 47%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
+            <!-- <div class="data-value-display" style="left: 28%; top: 50%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
               <div class="data-value" style="display: flex; justify-content: space-around; gap: 20px;"> 发电Uab <span style="text-align: right;">{{systemData[currentSystemState].generator.Uab }}</span></div>
               <div class="data-value" style="display: flex; justify-content: space-around; gap: 20px;"> A相电流 <span style="text-align: right;">{{ systemData[currentSystemState].generator.currentA }}</span></div>
               <div class="data-value" style="display: flex; justify-content: space-between; gap: 20px;">总有功功率 <span style="text-align: right;">{{ systemData[currentSystemState].generator.powerTotal }}</span></div>
               <div class="data-value" style="display: flex; justify-content: space-between; gap: 20px;">总无功功率 <span style="text-align: right;">{{ systemData[currentSystemState].generator.reactiveTotal }}</span></div>
-            </div>
-          </div>
+            </div> -->
+          <!-- </div> -->
         </div>
         
         <!-- <div class="placeholder-image" v-else>
@@ -164,12 +171,12 @@
               <span class="data-value">{{ systemData[currentSystemState].lithium.coldOutTemp }}</span>
             </div>
             <div class="data-item">
-              <span class="data-label">热水入口温度</span>
-              <span class="data-value">{{ systemData[currentSystemState].lithium.hotInTemp }}</span>
+              <span class="data-label">烟气进口温度</span>
+              <span class="data-value">{{ systemData[currentSystemState].lithium.smokeInTemp }}</span>
             </div>
             <div class="data-item">
-              <span class="data-label">热水出口温度</span>
-              <span class="data-value">{{ systemData[currentSystemState].lithium.hotOutTemp }}</span>
+              <span class="data-label">烟气出口温度</span>
+              <span class="data-value">{{ systemData[currentSystemState].lithium.smokeOutTemp }}</span>
             </div>
             <div class="data-item">
               <span class="data-label">冷却水供水温度</span>
@@ -251,12 +258,12 @@
               <div class="gauge-value">{{ systemData[currentSystemState].lithium.coldInTemp }}</div>
             </div>
           </div>
-          <!-- 热水入口温度 -->
+          <!-- 烟气进口温度 -->
           <div class="gauge-chart">
-            <div class="gauge-title">热水入口温度</div>
-            <div class="gauge-circle" :style="{'--progress': `calc((${systemData[currentSystemState].lithium.hotInTempValue} / 100) * 100%)`}">
+            <div class="gauge-title">烟气进口温度</div>
+            <div class="gauge-circle" :style="{'--progress': `calc((${systemData[currentSystemState].lithium.smokeInTempValue} / 300) * 100%)`}">
               <div class="gauge-progress"></div>
-              <div class="gauge-value">{{ systemData[currentSystemState].lithium.hotInTemp }}</div>
+              <div class="gauge-value">{{ systemData[currentSystemState].lithium.smokeInTemp }}</div>
             </div>
           </div>
         </div>
@@ -288,12 +295,12 @@
 
                   <!-- 运行状态曲线+数据点 -->
                   <g v-if="currentSystemState === 'running'">
-                    <!-- 趋势曲线 -->
-                    <path d="M40,120 Q135,90 230,100 T420,70" fill="none" stroke="#00bfff" stroke-width="2.5"/>
-                    <!-- 数据点（5个关键节点） -->
-                    <template v-for="(point, idx) in [120,90,100,85,70]" :key="idx">
-                      <circle :cx="40 + idx*95" :cy="point" r="4" fill="#00bfff" stroke="#fff" stroke-width="1"/>
-                      <text :x="40 + idx*95" :y="point - 8" fill="#00bfff" font-size="10" text-anchor="middle">{{ 200 - Math.round((point-30)/1.2) }}A</text>
+                    <!-- 趋势曲线 - 动态跟随实时数据 -->
+                    <path :d="`M40,${currentGeneratorCurrentY} Q135,${currentGeneratorCurrentY - 2.5} 230,${currentGeneratorCurrentY + 3.5} T420,${currentGeneratorCurrentY - 1.5}`" fill="none" stroke="#00bfff" stroke-width="2.5"/>
+                    <!-- 数据点（5个关键节点） - 动态跟随实时数据 -->
+                    <template v-for="(offset, idx) in [0, -2.5, 3.5, 0.5, -1.5]" :key="idx">
+                      <circle :cx="40 + idx*95" :cy="currentGeneratorCurrentY + offset" r="4" fill="#00bfff" stroke="#fff" stroke-width="1"/>
+                      <text :x="40 + idx*95" :y="currentGeneratorCurrentY + offset - 8" fill="#00bfff" font-size="10" text-anchor="middle">{{ idx === 0 ? systemData.running.generator.currentAValue.toFixed(1) : (systemData.running.generator.currentAValue + (offset * 0.6)).toFixed(1) }}A</text>
                     </template>
                   </g>
 
@@ -302,7 +309,7 @@
                     <path d="M40,150 Q135,150 230,150 T420,150" fill="none" stroke="#ff6b6b" stroke-width="2.5"/>
                     <template v-for="idx in [0,1,2,3,4]" :key="idx">
                       <circle :cx="40 + idx*95" cy="150" r="4" fill="#ff6b6b" stroke="#fff" stroke-width="1"/>
-                      <text :x="40 + idx*95" y="142" fill="#ff6b6b" font-size="10" text-anchor="middle">0A</text>
+                      <text :x="40 + idx*95" y="142" fill="#ff6b6b" font-size="10" text-anchor="middle">0.0A</text>
                     </template>
                   </g>
                 </svg>
@@ -330,10 +337,12 @@
 
                   <!-- 运行状态曲线+数据点 -->
                   <g v-if="currentSystemState === 'running'">
-                    <path d="M40,90 Q135,60 230,70 T420,40" fill="none" stroke="#32cd32" stroke-width="2.5"/>
-                    <template v-for="(point, idx) in [90,60,70,55,40]" :key="idx">
-                      <circle :cx="40 + idx*95" :cy="point" r="4" fill="#32cd32" stroke="#fff" stroke-width="1"/>
-                      <text :x="40 + idx*95" :y="point - 8" fill="#32cd32" font-size="10" text-anchor="middle">{{ Math.round((150 - (point-30))/1.2) }}kW</text>
+                    <!-- 趋势曲线 - 动态跟随实时数据 -->
+                    <path :d="`M40,${currentTotalPowerY} Q135,${currentTotalPowerY - 6} 230,${currentTotalPowerY - 2} T420,${currentTotalPowerY - 13}`" fill="none" stroke="#32cd32" stroke-width="2.5"/>
+                    <!-- 数据点（5个关键节点） - 动态跟随实时数据 -->
+                    <template v-for="(offset, idx) in [0, -6, -2, -8, -13]" :key="idx">
+                      <circle :cx="40 + idx*95" :cy="currentTotalPowerY + offset" r="4" fill="#32cd32" stroke="#fff" stroke-width="1"/>
+                      <text :x="40 + idx*95" :y="currentTotalPowerY + offset - 8" fill="#32cd32" font-size="10" text-anchor="middle">{{ idx === 0 ? systemData.running.generator.powerTotalValue.toFixed(1) : (systemData.running.generator.powerTotalValue + (offset * 0.1)).toFixed(1) }}kW</text>
                     </template>
                   </g>
 
@@ -342,7 +351,7 @@
                     <path d="M40,150 Q135,150 230,150 T420,150" fill="none" stroke="#ff6b6b" stroke-width="2.5"/>
                     <template v-for="idx in [0,1,2,3,4]" :key="idx">
                       <circle :cx="40 + idx*95" cy="150" r="4" fill="#ff6b6b" stroke="#fff" stroke-width="1"/>
-                      <text :x="40 + idx*95" y="142" fill="#ff6b6b" font-size="10" text-anchor="middle">0kW</text>
+                      <text :x="40 + idx*95" y="142" fill="#ff6b6b" font-size="10" text-anchor="middle">0.0kW</text>
                     </template>
                   </g>
                 </svg>
@@ -370,12 +379,12 @@
                     </template>
                   </g>
 
-                  <!-- 运行状态曲线+数据点（贴合Excel运行值8.5℃波动） -->
+                  <!-- 运行状态曲线+数据点（动态跟随实时数据） -->
                   <g v-if="currentSystemState === 'running'">
-                    <path d="M40,80 Q135,70 230,80 T420,60" fill="none" stroke="#00bfff" stroke-width="2.5"/>
-                    <template v-for="(point, idx) in [80,70,80,75,60]" :key="idx">
-                      <circle :cx="40 + idx*95" :cy="point" r="4" fill="#00bfff" stroke="#fff" stroke-width="1"/>
-                      <text :x="40 + idx*95" :y="point - 8" fill="#00bfff" font-size="10" text-anchor="middle">{{ Math.round((30 - (point-30)/4)) }}℃</text>
+                    <path :d="`M40,${currentColdTempY} Q135,${currentColdTempY - 4} 230,${currentColdTempY - 1} T420,${currentColdTempY - 7}`" fill="none" stroke="#00bfff" stroke-width="2.5"/>
+                    <template v-for="(offset, idx) in [0, -4, -1, -3, -7]" :key="idx">
+                      <circle :cx="40 + idx*95" :cy="currentColdTempY + offset" r="4" fill="#00bfff" stroke="#fff" stroke-width="1"/>
+                      <text :x="40 + idx*95" :y="currentColdTempY + offset - 8" fill="#00bfff" font-size="10" text-anchor="middle">{{ idx === 0 ? systemData.running.lithium.coldInTempValue.toFixed(1) : (systemData.running.lithium.coldInTempValue + (offset * 0.1)).toFixed(1) }}℃</text>
                     </template>
                   </g>
 
@@ -384,16 +393,16 @@
                     <path d="M40,58 Q135,58 230,58 T420,58" fill="none" stroke="#ff6b6b" stroke-width="2.5"/>
                     <template v-for="idx in [0,1,2,3,4]" :key="idx">
                       <circle :cx="40 + idx*95" cy="58" r="4" fill="#ff6b6b" stroke="#fff" stroke-width="1"/>
-                      <text :x="40 + idx*95" y="50" fill="#ff6b6b" font-size="10" text-anchor="middle">18℃</text>
+                      <text :x="40 + idx*95" y="50" fill="#ff6b6b" font-size="10" text-anchor="middle">18.0℃</text>
                     </template>
                   </g>
                 </svg>
               </div>
             </div>
 
-            <!-- 4. 热水入口温度趋势图（新增坐标+数据点） -->
+            <!-- 4. 烟气进口温度趋势图（新增坐标+数据点） -->
             <div class="trend-chart">
-              <div class="trend-title">热水入口温度趋势（℃）</div>
+              <div class="trend-title">烟气进口温度趋势（℃）</div>
               <div class="trend-plot">
                 <svg width="100%" height="100%" viewBox="0 0 450 180">
                   <!-- 坐标轴：X轴（时间）、Y轴（温度） -->
@@ -404,27 +413,27 @@
                       <text :x="40 + idx*95" y="170" fill="#b0c4de" font-size="11" text-anchor="middle">{{ x }}min</text>
                     </template>
                     <line x1="40" y1="30" x2="40" y2="150" stroke="#b0c4de" stroke-width="1.5"/>
-                    <template v-for="(y, idx) in [0,25,50,75,100]" :key="idx">
-                      <line x1="35" :y1="150 - idx*30" x2="45" :y2="150 - idx*30" stroke="#b0c4de" stroke-width="1.5"/>
-                      <text x="30" :y="153 - idx*30" fill="#b0c4de" font-size="11" text-anchor="end">{{ y }}℃</text>
+                    <template v-for="(y, idx) in [270,280,290,300,310]" :key="idx">
+                      <line x1="35" :y1="150 - (idx*30)" x2="45" :y2="150 - (idx*30)" stroke="#b0c4de" stroke-width="1.5"/>
+                      <text x="30" :y="153 - (idx*30)" fill="#b0c4de" font-size="11" text-anchor="end">{{ y }}℃</text>
                     </template>
                   </g>
 
-                  <!-- 运行状态曲线+数据点（贴合Excel运行值92.2℃波动） -->
+                  <!-- 运行状态曲线+数据点（动态跟随实时数据） -->
                   <g v-if="currentSystemState === 'running'">
-                    <path d="M40,36 Q135,30 230,36 T420,24" fill="none" stroke="#ff6347" stroke-width="2.5"/>
-                    <template v-for="(point, idx) in [36,30,36,33,24]" :key="idx">
-                      <circle :cx="40 + idx*95" :cy="point" r="4" fill="#ff6347" stroke="#fff" stroke-width="1"/>
-                      <text :x="40 + idx*95" :y="point - 8" fill="#ff6347" font-size="10" text-anchor="middle">{{ Math.round((100 - (point-30))/1.2) }}℃</text>
+                    <path :d="`M40,${currentSmokeTempY} Q135,${currentSmokeTempY - 3} 230,${currentSmokeTempY - 1} T420,${currentSmokeTempY - 7}`" fill="none" stroke="#ff6347" stroke-width="2.5"/>
+                    <template v-for="(offset, idx) in [0, -3, -1, -5, -7]" :key="idx">
+                      <circle :cx="40 + idx*95" :cy="currentSmokeTempY + offset" r="4" fill="#ff6347" stroke="#fff" stroke-width="1"/>
+                      <text :x="40 + idx*95" :y="currentSmokeTempY + offset - 8" fill="#ff6347" font-size="10" text-anchor="middle">{{ idx === 0 ? systemData.running.lithium.smokeInTempValue.toFixed(1) : (systemData.running.lithium.smokeInTempValue + (offset * 0.25)).toFixed(1) }}℃</text>
                     </template>
                   </g>
 
                   <!-- 停机状态曲线+数据点（贴合Excel停机值18.0℃） -->
                   <g v-else>
-                    <path d="M40,102 Q135,102 230,102 T420,102" fill="none" stroke="#ff6b6b" stroke-width="2.5"/>
+                    <path d="M40,150 Q135,150 230,150 T420,150" fill="none" stroke="#ff6b6b" stroke-width="2.5"/>
                     <template v-for="idx in [0,1,2,3,4]" :key="idx">
-                      <circle :cx="40 + idx*95" cy="102" r="4" fill="#ff6b6b" stroke="#fff" stroke-width="1"/>
-                      <text :x="40 + idx*95" y="94" fill="#ff6b6b" font-size="10" text-anchor="middle">18℃</text>
+                      <circle :cx="40 + idx*95" cy="150" r="4" fill="#ff6b6b" stroke="#fff" stroke-width="1"/>
+                      <text :x="40 + idx*95" y="142" fill="#ff6b6b" font-size="10" text-anchor="middle">18.0℃</text>
                     </template>
                   </g>
                 </svg>
@@ -438,6 +447,9 @@
     </div>
 </template>
 <script>
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+
 export default {
   name: 'DataDashboard',
   data() {
@@ -456,6 +468,40 @@ export default {
         hotWaterReturnTemperature: true,
         generatorVoltage: true
       },
+
+    // 趋势图的基础配置
+    trendChartConfig: {
+      // SVG视图框大小
+      viewBox: {
+        width: 450,
+        height: 180
+      },
+      // 坐标轴范围
+      axes: {
+        // 时间轴范围（分钟）
+        time: {
+          min: 0,
+          max: 60
+        },
+        // 各个参数的Y轴范围
+        generatorCurrent: {
+          min: 0,
+          max: 200
+        },
+        totalPower: {
+          min: 0,
+          max: 150
+        },
+        coldTemp: {
+          min: 0,
+          max: 30
+        },
+        hotTemp: {
+          min: 0,
+          max: 300
+        }
+      }
+    },
       // 两套数据：严格对应「画面数据.xlsx」
       systemData: {
         // 系统停机数据
@@ -467,14 +513,14 @@ export default {
           },
           generator: {
             Uab: '0.0v',
-            UabValue: 0, // 用于计算进度条（纯数值）
+            UabValue: 0.0, // 用于计算进度条（纯数值）
             currentA: '0.0A',
-            currentAValue: 0,
+            currentAValue: 0.0,
             powerTotal: '0.0kw',
-            powerTotalValue: 0,
+            powerTotalValue: 0.0,
             reactiveTotal: '0.0kvar',
             frequency: '0.0Hz',
-            frequencyValue: 0,
+            frequencyValue: 0.0,
             speed: '0.0 r/min',
             exhaustTemp: '18.5℃',
             gridSwitch: '分闸',
@@ -485,9 +531,9 @@ export default {
             coldInTemp: '17.8℃',
             coldInTempValue: 17.8, // 用于计算进度条（纯数值）
             coldOutTemp: '18.1℃',
-            hotInTemp: '18.0℃',
-            hotInTempValue: 18.0,
-            hotOutTemp: '17.9℃',
+            smokeInTemp: '18.0℃',
+            smokeInTempValue: 18.0,
+            smokeOutTemp: '17.9℃',
             coolInTemp: '18.2℃',
             coolOutTemp: '17.6℃',
             evaporatorTemp: '16.6℃',
@@ -505,14 +551,14 @@ export default {
           generator: {
             Uab: '401.0v',
             UabValue: 401.0,
-            currentA: '156.0A',
-            currentAValue: 156.0,
-            powerTotal: '105.1kw',
-            powerTotalValue: 105.1,
-            reactiveTotal: '32.8kvar',
-            frequency: '50.2Hz',
-            frequencyValue: 50.2,
-            speed: '2998 r/min',
+            currentA: '80.9A',
+            currentAValue: 80.9,
+            powerTotal: '55.7kw',
+            powerTotalValue: 55.7,
+            reactiveTotal: '16.8kvar',
+            frequency: '49.9Hz',
+            frequencyValue: 49.9,
+            speed: '2998.0 r/min',
             exhaustTemp: '418.5℃',
             gridSwitch: '合闸',
             totalPower: '130012.5 kwh',
@@ -522,11 +568,12 @@ export default {
             coldInTemp: '8.5℃',
             coldInTempValue: 8.5,
             coldOutTemp: '12.6℃',
-            hotInTemp: '92.2℃',
-            hotInTempValue: 92.2,
-            hotOutTemp: '87.8℃',
-            coolInTemp: '25.6℃',
-            coolOutTemp: '29.0℃',
+            smokeInTemp: '288.8℃',
+            smokeInTempValue: 288.8,
+            smokeOutTemp: '65.5℃',
+            smokeOutTempValue: 65.5, // 用于计算进度条（纯数值）
+            coolInTemp: '29.0℃',
+            coolOutTemp: '25.6℃',
             evaporatorTemp: '6.5℃',
             evaporatorPress: '0.69Mpa',
             startState: '停机' // 运行时溴化锂为停机状态（对应Excel）
@@ -535,10 +582,58 @@ export default {
       }
     }
   },
+  computed: {
+    // 计算发电机电流的Y坐标（实时数据转SVG坐标）
+    currentGeneratorCurrentY() {
+      // 电流值：systemData.running.generator.currentAValue
+      // 转换公式：SVG Y坐标 = 坐标轴底部Y坐标 - (电流值/最大值) * 坐标轴高度
+      // 坐标轴底部Y坐标：150
+      // 坐标轴高度：120 (150-30)
+      return 150 - (this.systemData.running.generator.currentAValue / this.trendChartConfig.axes.generatorCurrent.max) * 120;
+    },
+    // 计算总有功功率的Y坐标（实时数据转SVG坐标）
+    currentTotalPowerY() {
+      // 功率值：systemData.running.generator.powerTotalValue
+      // 转换公式：SVG Y坐标 = 坐标轴底部Y坐标 - (功率值/最大值) * 坐标轴高度
+      return 150 - (this.systemData.running.generator.powerTotalValue / this.trendChartConfig.axes.totalPower.max) * 120;
+    },
+    // 计算冷水供水温度的Y坐标（实时数据转SVG坐标）
+    currentColdTempY() {
+      // 温度值：systemData.running.lithium.coldInTempValue
+      // 转换公式：SVG Y坐标 = 坐标轴底部Y坐标 - (温度值/最大值) * 坐标轴高度
+      return 150 - (this.systemData.running.lithium.coldInTempValue / this.trendChartConfig.axes.coldTemp.max) * 120;
+    },
+    // 计算烟气进口温度的Y坐标（实时数据转SVG坐标）
+    currentSmokeTempY() {
+      // 温度值：systemData.running.lithium.smokeInTempValue
+      // 转换公式：SVG Y坐标 = 坐标轴底部Y坐标 - (温度值/最大值) * 坐标轴高度
+      return 150 - (this.systemData.running.lithium.smokeInTempValue / this.trendChartConfig.axes.hotTemp.max) * 120;
+    }
+  },
   mounted() {
     // 初始化日期时间
     this.updateDateTime();
     setInterval(() => this.updateDateTime(), 1000);
+    
+    // 添加实时数据更新定时器，每1分钟更新一次
+    setInterval(() => this.updateRealTimeData(), 2000);
+    
+    // 初始化3D场景
+    this.$nextTick(() => {
+      this.init3DScene();
+    });
+  },
+  beforeUnmount() {
+    // 清理3D场景以避免内存泄漏
+    if (this.animationId) {
+      cancelAnimationFrame(this.animationId);
+    }
+    if (this.scene) {
+      this.scene.dispose();
+    }
+    if (this.renderer) {
+      this.renderer.dispose();
+    }
   },
   methods: {
     // 跳转运行优化页面
@@ -549,6 +644,7 @@ export default {
     handleDiagnosisClick() {
       this.$router.push('/fault-diagnosis');
     },
+
     // 设置系统状态（停机/运行）
     setSystemState(state) {
       this.currentSystemState = state;
@@ -574,6 +670,369 @@ export default {
     // 切换数据点标签的显示状态
     toggleDataLabels(pointName) {
       this.dataPointsVisibility[pointName] = !this.dataPointsVisibility[pointName];
+    },
+    
+    // 更新实时数据，每个数据项独立变化，部分数据项可能保持不变，创造更自然的曲线形态
+    updateRealTimeData() {
+      // 只有在系统运行状态下才更新数据
+      if (this.currentSystemState === 'running') {
+        const runningData = this.systemData.running;
+        
+        // 基础变化幅度因子
+        const baseChangeFactor = 0.3 + Math.random() * 0.5;
+        
+        // 更新powerGrid数据 - 电网电压在399.0-403.0V之间波动，80%概率变化
+        if (Math.random() < 0.8) {
+          const gridVoltageChangeUab = (Math.random() > 0.5 ? 1 : -1) * baseChangeFactor * 1.2;
+          const newUab = Math.max(399.0, Math.min(403.0, parseFloat(runningData.powerGrid.Uab) + gridVoltageChangeUab));
+          runningData.powerGrid.Uab = `${newUab.toFixed(1)}v`;
+        }
+        
+        if (Math.random() < 0.8) {
+          const gridVoltageChangeUbc = (Math.random() > 0.5 ? 1 : -1) * baseChangeFactor * 1.2;
+          const newUbc = Math.max(399.0, Math.min(403.0, parseFloat(runningData.powerGrid.Ubc) + gridVoltageChangeUbc));
+          runningData.powerGrid.Ubc = `${newUbc.toFixed(1)}v`;
+        }
+        
+        if (Math.random() < 0.8) {
+          const gridVoltageChangeUca = (Math.random() > 0.5 ? 1 : -1) * baseChangeFactor * 1.2;
+          const newUca = Math.max(399.0, Math.min(403.0, parseFloat(runningData.powerGrid.Uca) + gridVoltageChangeUca));
+          runningData.powerGrid.Uca = `${newUca.toFixed(1)}v`;
+        }
+        
+        // 更新generator数据
+        // 发电机电压：在400.0-402.0V之间波动，65%概率变化，变化相对平缓
+        if (Math.random() < 0.65) {
+          const generatorVoltageChange = (Math.random() > 0.6 ? 1 : -1) * baseChangeFactor * 0.6;
+          const newGenUab = Math.max(400.0, Math.min(402.0, runningData.generator.UabValue + generatorVoltageChange));
+          runningData.generator.UabValue = parseFloat(newGenUab.toFixed(1));
+          runningData.generator.Uab = `${runningData.generator.UabValue.toFixed(1)}v`;
+        }
+        
+        // 电流：在80.0-81.5A之间波动，85%概率变化，变化较为频繁
+        if (Math.random() < 0.85) {
+          const currentChange = (Math.random() > 0.5 ? 1 : -1) * baseChangeFactor * 3;
+          const newCurrentA = Math.max(80.0, Math.min(81.5, runningData.generator.currentAValue + currentChange));
+          runningData.generator.currentAValue = parseFloat(newCurrentA.toFixed(1));
+          runningData.generator.currentA = `${runningData.generator.currentAValue.toFixed(1)}A`;
+        }
+        
+        // 总有功功率：在55.0-56.5kW之间波动，85%概率变化，与电流有一定相关性但不完全同步
+        if (Math.random() < 0.85) {
+          const powerChange = (Math.random() > 0.52 ? 1 : -1) * baseChangeFactor * 5;
+          const newPowerTotal = Math.max(55.0, Math.min(56.5, runningData.generator.powerTotalValue + powerChange));
+          runningData.generator.powerTotalValue = parseFloat(newPowerTotal.toFixed(1));
+          runningData.generator.powerTotal = `${runningData.generator.powerTotalValue.toFixed(1)}kw`;
+        }
+        
+        // 无功功率：在16.0-17.5kvar之间波动，70%概率变化，独立变化
+        if (Math.random() < 0.7) {
+          const reactiveChange = (Math.random() > 0.48 ? 1 : -1) * baseChangeFactor * 1.5;
+          const newReactiveTotal = Math.max(16.0, Math.min(17.5, parseFloat(runningData.generator.reactiveTotal) + reactiveChange));
+          runningData.generator.reactiveTotal = `${newReactiveTotal.toFixed(1)}kvar`;
+        }
+        
+        // 频率：在49.8-50.1Hz之间波动，60%概率变化，变化较小且稳定
+        if (Math.random() < 0.6) {
+          const frequencyChange = (Math.random() > 0.5 ? 1 : -1) * baseChangeFactor * 0.1;
+          const newFrequency = Math.max(49.8, Math.min(50.1, runningData.generator.frequencyValue + frequencyChange));
+          runningData.generator.frequencyValue = parseFloat(newFrequency.toFixed(1));
+          runningData.generator.frequency = `${runningData.generator.frequencyValue.toFixed(1)}Hz`;
+        }
+        
+        // 转速：在2995-3000 r/min之间波动，50%概率变化，变化缓慢且稳定
+        if (Math.random() < 0.5) {
+          const speedChange = (Math.random() > 0.6 ? 1 : -1) * Math.floor(baseChangeFactor * 5);
+          const newSpeed = Math.max(2995, Math.min(3000, parseInt(runningData.generator.speed)) + speedChange);
+          runningData.generator.speed = `${newSpeed.toFixed(1)} r/min`;
+        }
+        
+        // 排气温度：在417.0-420.0℃之间波动，75%概率变化，与功率变化有一定相关性
+        if (Math.random() < 0.75) {
+          const exhaustTempChange = (Math.random() > 0.53 ? 1 : -1) * baseChangeFactor * 3;
+          const newExhaustTemp = Math.max(417.0, Math.min(420.0, parseFloat(runningData.generator.exhaustTemp) + exhaustTempChange));
+          runningData.generator.exhaustTemp = `${newExhaustTemp.toFixed(1)}℃`;
+        }
+        
+        // 累计发电量：持续增长
+        const newTotalPower = parseFloat(runningData.generator.totalPower) + 0.5 + Math.random() * 1.5;
+        runningData.generator.totalPower = `${newTotalPower.toFixed(1)} kwh`;
+        
+        // 累计燃气量：持续增长
+        const newTotalGas = parseFloat(runningData.generator.totalGas) + 0.3 + Math.random() * 0.7;
+        runningData.generator.totalGas = `${newTotalGas.toFixed(1)} m³`;
+        
+        // 更新lithium数据
+        // 冷水进水温度：在8.0-9.0℃之间波动，70%概率变化，独立变化
+        if (Math.random() < 0.7) {
+          const coldInTempChange = (Math.random() > 0.55 ? -1 : 1) * baseChangeFactor * 0.8; // 冷水温度变化方向特殊
+          const newColdInTemp = Math.max(8.0, Math.min(9.0, runningData.lithium.coldInTempValue + coldInTempChange));
+          runningData.lithium.coldInTempValue = parseFloat(newColdInTemp.toFixed(1));
+          runningData.lithium.coldInTemp = `${runningData.lithium.coldInTempValue.toFixed(1)}℃`;
+        }
+        
+        // 冷水出水温度：在12.0-13.5℃之间波动，65%概率变化，与进水温度有一定相关性
+        if (Math.random() < 0.65) {
+          const coldOutTempChange = (Math.random() > 0.55 ? -1 : 1) * baseChangeFactor * 0.8;
+          const newColdOutTemp = Math.max(12.0, Math.min(13.5, parseFloat(runningData.lithium.coldOutTemp) + coldOutTempChange));
+          runningData.lithium.coldOutTemp = `${newColdOutTemp.toFixed(1)}℃`;
+        }
+        
+        // 烟气进口温度：在280-300℃之间波动，60%概率变化，独立变化
+        if (Math.random() < 0.6) {
+          const smokeInTempChange = (Math.random() > 0.52 ? 1 : -1) * baseChangeFactor * 3;
+          const newsmokeInTemp = Math.max(280.0, Math.min(300.0, runningData.lithium.smokeInTempValue + smokeInTempChange));
+          runningData.lithium.smokeInTempValue = parseFloat(newsmokeInTemp.toFixed(1));
+          runningData.lithium.smokeInTemp = `${runningData.lithium.smokeInTempValue.toFixed(1)}℃`;
+        }
+        
+        // 烟气出口温度：在60-70℃之间波动，55%概率变化，与进水温度相关但有延迟
+        if (Math.random() < 0.55) {
+          const smokeOutTempChange = (Math.random() > 0.52 ? 1 : -1) * baseChangeFactor * 3;
+          const newsmokeOutTemp = Math.max(60.0, Math.min(70.0, parseFloat(runningData.lithium.smokeOutTemp) + smokeOutTempChange));
+          runningData.lithium.smokeOutTemp = `${newsmokeOutTemp.toFixed(1)}℃`;
+        }
+        
+        // 冷却水进水温度：在25.0-26.5℃之间波动，65%概率变化，独立变化
+        if (Math.random() < 0.65) {
+          const coolInTempChange = (Math.random() > 0.5 ? 1 : -1) * baseChangeFactor * 0.8;
+          const newCoolInTemp = Math.max(28.5, Math.min(30.0, parseFloat(runningData.lithium.coolInTemp) + coolInTempChange));
+          runningData.lithium.coolInTemp = `${newCoolInTemp.toFixed(1)}℃`;
+        }
+        
+        // 冷却水出水温度：在28.5-30.0℃之间波动，60%概率变化，与进水温度相关
+        if (Math.random() < 0.6) {
+          const coolOutTempChange = (Math.random() > 0.5 ? 1 : -1) * baseChangeFactor * 0.8;
+          const newCoolOutTemp = Math.max(25.0, Math.min(26.5, parseFloat(runningData.lithium.coolOutTemp) + coolOutTempChange));
+          runningData.lithium.coolOutTemp = `${newCoolOutTemp.toFixed(1)}℃`;
+        }
+        
+        // 蒸发器温度：在6.0-7.0℃之间波动，70%概率变化，独立变化
+        if (Math.random() < 0.7) {
+          const evaporatorTempChange = (Math.random() > 0.55 ? -1 : 1) * baseChangeFactor * 0.5;
+          const newEvaporatorTemp = Math.max(6.0, Math.min(7.0, parseFloat(runningData.lithium.evaporatorTemp) + evaporatorTempChange));
+          runningData.lithium.evaporatorTemp = `${newEvaporatorTemp.toFixed(1)}℃`;
+        }
+        
+        // 蒸发器压力：在0.68-0.70Mpa之间波动，65%概率变化，独立变化
+        if (Math.random() < 0.65) {
+          const evaporatorPressChange = (Math.random() > 0.5 ? 1 : -1) * baseChangeFactor * 0.008;
+          const newEvaporatorPress = Math.max(0.68, Math.min(0.70, parseFloat(runningData.lithium.evaporatorPress) + evaporatorPressChange));
+          runningData.lithium.evaporatorPress = `${newEvaporatorPress.toFixed(2)}Mpa`;
+        }
+        
+        // 为了更好地观察效果，添加控制台日志
+        console.log('实时数据已更新，部分数据项保持不变以创建更自然的曲线形态');
+      }
+    },
+    
+    // 初始化3D场景和加载模型
+    init3DScene() {
+      // 如果容器不存在或模型路径未配置，则不执行3D初始化
+      if (!this.$refs.modelContainer) {
+        console.warn('3D模型容器不存在');
+        return;
+      }
+      
+      // 创建场景
+      this.scene = new THREE.Scene();
+      
+      // 创建相机
+      const containerWidth = this.$refs.modelContainer.offsetWidth;
+      const containerHeight = this.$refs.modelContainer.offsetHeight;
+      this.camera = new THREE.PerspectiveCamera(75, containerWidth / containerHeight, 0.1, 1000);
+      
+      // 创建渲染器
+      this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      this.renderer.setSize(containerWidth, containerHeight);
+      this.renderer.setClearColor(0x000000, 0); // 透明背景
+      this.$refs.modelContainer.appendChild(this.renderer.domElement);
+      
+      // 添加环境光
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+      this.scene.add(ambientLight);
+      
+      // 添加方向光
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+      directionalLight.position.set(1, 1, 1);
+      this.scene.add(directionalLight);
+      
+      // 加载GLB模型
+      const loader = new GLTFLoader();
+      loader.load(
+        '/equipment.glb',
+        (gltf) => {
+          this.model = gltf.scene;
+          
+          // 设置模型初始旋转：沿y轴顺时针旋转90度，沿z轴顺时针旋转60度
+          this.model.rotation.y = -Math.PI / 2; // y轴顺时针旋转90度
+          this.model.rotation.z = -Math.PI / 4; // z轴顺时针旋转45度
+          
+          // 计算并设置模型大小以完全适配容器
+          this.resizeModelToFitContainer();
+          
+          this.scene.add(this.model);
+          
+          // 隐藏备用图片
+          if (this.$refs.fallbackImage) {
+            this.$refs.fallbackImage.style.display = 'none';
+          }
+          
+          // 添加鼠标交互功能
+          this.addMouseInteraction();
+          
+          console.log('3D模型加载成功，已适配容器大小，支持鼠标缩放和旋转');
+          
+          // 渲染一次
+          this.renderer.render(this.scene, this.camera);
+        },
+        (xhr) => {
+          // 加载进度
+          console.log((xhr.loaded / xhr.total * 100) + '% 模型已加载');
+        },
+        (error) => {
+          // 加载错误
+          console.error('3D模型加载失败:', error);
+          // 确保备用图片可见
+          if (this.$refs.fallbackImage) {
+            this.$refs.fallbackImage.style.display = 'block';
+          }
+        }
+      );
+      
+      // 添加窗口大小变化监听
+      window.addEventListener('resize', this.handleResize);
+    },
+    
+    // 调整模型大小以适配容器
+    resizeModelToFitContainer() {
+      if (!this.model || !this.$refs.modelContainer || !this.camera) return;
+      
+      const containerWidth = this.$refs.modelContainer.offsetWidth;
+      const containerHeight = this.$refs.modelContainer.offsetHeight;
+      
+      // 计算模型的包围盒
+      const box = new THREE.Box3().setFromObject(this.model);
+      const size = box.getSize(new THREE.Vector3());
+      const center = box.getCenter(new THREE.Vector3());
+      
+      // 确保模型居中
+      this.model.position.x = -center.x;
+      this.model.position.y = -center.y;
+      this.model.position.z = -center.z;
+      
+     
+      const scale = 8;
+      this.model.scale.set(scale, scale, scale);
+      
+      // 重新计算相机位置，打破与scale的直接比例关系
+      // 使用模型基础大小计算相机距离，并让相机距离增长速度小于scale增长速度
+      const baseModelSize = Math.max(size.x, size.y, size.z);
+      const fov = this.camera.fov * (Math.PI / 180);
+      // 使用基础大小计算初始相机距离，然后与scale建立对数关系，避免比例增长
+      const baseDistance = baseModelSize / (2 * Math.tan(fov / 2)) * 1.5;
+      // 使用平方根关系，让相机距离增长速度慢于scale增长
+      const cameraDistance = baseDistance * Math.sqrt(scale);
+      
+      // 设置相机位置
+      this.camera.position.z = cameraDistance;
+      this.camera.position.y = cameraDistance * 0.1; // 极低的俯视角度，确保更好地查看模型
+      
+      // 更新相机
+      this.camera.aspect = containerWidth / containerHeight;
+      this.camera.updateProjectionMatrix();
+    },
+    
+    // 处理窗口大小变化
+    handleResize() {
+      if (!this.$refs.modelContainer || !this.camera || !this.renderer) return;
+      
+      const containerWidth = this.$refs.modelContainer.offsetWidth;
+      const containerHeight = this.$refs.modelContainer.offsetHeight;
+      
+      this.camera.aspect = containerWidth / containerHeight;
+      this.camera.updateProjectionMatrix();
+      this.renderer.setSize(containerWidth, containerHeight);
+      
+      // 如果模型已加载，重新调整大小
+      if (this.model) {
+        this.resizeModelToFitContainer();
+        this.renderer.render(this.scene, this.camera);
+      }
+    },
+    
+    // 添加鼠标交互功能
+    addMouseInteraction() {
+      if (!this.$refs.modelContainer) return;
+      
+      let isDragging = false;
+      let previousMousePosition = { x: 0, y: 0 };
+      
+      // 鼠标按下事件 - 开始拖拽旋转
+      this.$refs.modelContainer.addEventListener('mousedown', (event) => {
+        isDragging = true;
+        previousMousePosition = { x: event.clientX, y: event.clientY };
+      });
+      
+      // 鼠标移动事件 - 处理旋转
+      this.$refs.modelContainer.addEventListener('mousemove', (event) => {
+        if (!isDragging || !this.model) return;
+        
+        const deltaX = event.clientX - previousMousePosition.x;
+        const deltaY = event.clientY - previousMousePosition.y;
+        
+        // 旋转模型
+        this.model.rotation.y += deltaX * 0.005;
+        this.model.rotation.x += deltaY * 0.005;
+        
+        // 限制垂直旋转角度，避免过度旋转
+        this.model.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, this.model.rotation.x));
+        
+        previousMousePosition = { x: event.clientX, y: event.clientY };
+        this.renderer.render(this.scene, this.camera);
+      });
+      
+      // 鼠标释放事件 - 结束拖拽
+      window.addEventListener('mouseup', () => {
+        isDragging = false;
+      });
+      
+      // 鼠标滚轮事件 - 处理缩放（仅在按住鼠标左键时生效）
+      this.$refs.modelContainer.addEventListener('wheel', (event) => {
+        event.preventDefault();
+        
+        // 只有在按住鼠标左键时才执行缩放
+        if (!isDragging || !this.model) return;
+        
+        // 根据滚轮方向调整缩放比例，增大缩放步长
+        const scaleFactor = event.deltaY > 0 ? 0.8 : 1.25;
+        
+        // 获取当前缩放值并计算新的缩放值
+        const currentScale = this.model.scale.x;
+        const newScale = Math.max(0.2, Math.min(100, currentScale * scaleFactor));
+        
+        // 应用缩放
+        this.model.scale.set(newScale, newScale, newScale);
+        
+        this.renderer.render(this.scene, this.camera);
+      });
+    },
+    
+    // 清理3D资源
+    beforeUnmount() {
+      if (this.renderer) {
+        this.renderer.dispose();
+      }
+      
+      window.removeEventListener('resize', this.handleResize);
+      
+      // 清理鼠标事件监听器
+      if (this.$refs.modelContainer) {
+        this.$refs.modelContainer.removeEventListener('mousedown', null);
+        this.$refs.modelContainer.removeEventListener('mousemove', null);
+        this.$refs.modelContainer.removeEventListener('wheel', null);
+      }
+      window.removeEventListener('mouseup', null);
     }
   }
 }
@@ -962,6 +1421,23 @@ body {
   font-size: 12px;
   font-weight: normal;
   color: #d0d0d0;
+}
+
+/* 主标题样式 */
+.dashboard-title {
+  text-align: center;
+  padding: 20px 0;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, rgba(0, 191, 255, 0.1), rgba(0, 119, 204, 0.1));
+  border-bottom: 1px solid rgba(0, 191, 255, 0.3);
+}
+
+.dashboard-title h1 {
+  font-size: 28px;
+  font-weight: bold;
+  color: #00bfff;
+  text-shadow: 0 0 10px rgba(0, 191, 255, 0.5);
+  margin: 0;
 }
 
 /* 数据值异常状态（停机） */

@@ -6,7 +6,7 @@
         <span class="back-icon">←</span>
         <span>返回仪表盘</span>
       </button>
-      <h1 class="page-title">故障诊断中心</h1>
+      <h1 class="page-title">冷热电联供综合能源系统数字孪生运维管控平台</h1>
     </div>
     <!-- 主内容区域 -->
     <div class="diagnosis-content">
