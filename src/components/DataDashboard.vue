@@ -37,6 +37,7 @@
             width: 100%; 
             height: 100%; 
             display: flex; 
+            flex-direction: column; 
             align-items: center; 
             justify-content: center; 
             position: absolute; 
@@ -45,7 +46,33 @@
             font-size: 18px; 
             font-weight: bold;
           ">
-            模型加载中，请稍候...
+            <div style="margin-bottom: 20px;">模型加载中，请稍候...</div>
+            <div style="width: 300px; height: 20px; background-color: rgba(255, 255, 255, 0.2); border-radius: 10px; overflow: hidden; position: relative;">
+              <div 
+                style="
+                  height: 100%; 
+                  background: linear-gradient(90deg, #00bfff, #0066cc); 
+                  transition: width 0.3s ease;
+                "
+                :style="{ width: modelLoadingProgress + '%' }"
+              ></div>
+              <!-- 百分比文本显示在进度条外部，确保始终完整可见 -->
+              <div style="
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                color: white;
+                font-size: 12px;
+                font-weight: bold;
+                pointer-events: none;
+                text-shadow: 0 0 2px rgba(0,0,0,0.8);
+                min-width: 40px;
+                text-align: center;
+              ">
+                {{ Math.round(modelLoadingProgress) }}%
+              </div>
+            </div>
           </div>
           
           <!-- 顶层数据点层 -->
@@ -481,6 +508,8 @@ export default {
         hotWaterReturnTemperature: true,
         generatorVoltage: true
       },
+      // 模型加载进度
+      modelLoadingProgress: 0,
 
     // 趋势图的基础配置
     trendChartConfig: {
@@ -638,15 +667,17 @@ export default {
   },
   beforeUnmount() {
     // 清理3D场景以避免内存泄漏
-    if (this.animationId) {
-      cancelAnimationFrame(this.animationId);
-    }
-    if (this.scene) {
-      this.scene.dispose();
-    }
-    if (this.renderer) {
-      this.renderer.dispose();
-    }
+      if (this.animationId) {
+        cancelAnimationFrame(this.animationId);
+      }
+      if (this.scene) {
+        this.scene.dispose();
+      }
+      if (this.renderer) {
+        this.renderer.dispose();
+      }
+      // 移除窗口大小变化监听
+      window.removeEventListener('resize', this.handleResize);
   },
   methods: {
     // 跳转运行优化页面
@@ -893,12 +924,24 @@ export default {
             
             console.log('3D模型加载成功，已适配容器大小，支持鼠标缩放和旋转');
             
+
+            
             // 渲染一次
             this.renderer.render(this.scene, this.camera);
         },
         (xhr) => {
-          // 加载进度
-          console.log((xhr.loaded / xhr.total * 100) + '% 模型已加载');
+          // 加载进度 - 添加安全检查避免除零错误
+          let progress = 0;
+          if (xhr.total && xhr.total > 0) {
+            progress = (xhr.loaded / xhr.total * 100);
+          } else if (xhr.loaded > 0) {
+            // 如果没有total信息，随着加载增加进度，但不超过99%
+            progress = Math.min(99, xhr.loaded / 1000000 * 100); // 假设最大文件大小约为1MB
+          }
+          // 确保进度值在0-100范围内
+          progress = Math.max(0, Math.min(100, progress));
+          this.modelLoadingProgress = progress;
+          console.log(progress + '% 模型已加载');
         },
         (error) => {
           // 加载错误
@@ -1049,11 +1092,14 @@ export default {
         this.renderer.render(this.scene, this.camera);
       });
     },
-    
 
     
     // 清理3D资源
     beforeUnmount() {
+      if (this.animationId) {
+        cancelAnimationFrame(this.animationId);
+      }
+      
       if (this.renderer) {
         this.renderer.dispose();
       }
