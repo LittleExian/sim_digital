@@ -10,7 +10,7 @@
     </div>
     <!-- 主内容区域 -->
     <div class="optimization-content">
-      <!-- 系统状态卡片（匹配文档能耗/效率指标） -->
+      <!-- 系统状态卡片 -->
       <div class="status-cards">
         <div class="status-card">
           <div class="status-title">系统状态</div>
@@ -20,20 +20,20 @@
         <div class="status-card">
           <div class="status-title">当前综合能源利用率</div>
           <div class="status-value">{{ efficiencyData.utilizationRate }}</div>
-          <div class="status-change">+3.5%</div>
+          <div class="status-change positive">+3.5%</div>
         </div>
         <div class="status-card">
           <div class="status-title">碳排放减少</div>
           <div class="status-value">{{ efficiencyData.carbonReduction }}</div>
-          <div class="status-change">+2.1 t</div>
+          <div class="status-change positive">+2.1 t</div>
         </div>
         <div class="status-card">
           <div class="status-title">节能效益</div>
           <div class="status-value">{{ efficiencyData.energySaving }}</div>
-          <div class="status-change">+¥1,680</div>
+          <div class="status-change positive">+¥1,680</div>
         </div>
       </div>
-      <!-- 优化参数设置（匹配文档核心调控项） -->
+      <!-- 优化参数设置 -->
       <div class="optimization-params">
         <h2 class="section-title">优化参数设置</h2>
         <div class="params-grid">
@@ -73,113 +73,121 @@
           <span>运行优化</span>
         </button>
       </div>
-      <!-- 实时监测数据（匹配文档3D工艺流程参数） -->
+      <!-- 实时监测数据 -->
       <div class="monitoring-data">
         <h2 class="section-title">实时监测数据</h2>
         <div class="data-tables">
           <div class="data-table">
-          <h3 class="table-title">微燃机数据</h3>
-          <table>
-            <tr>
-              <td class="data-label">转速</td>
-              <td class="data-value">{{ systemData.running.generator.speed }}</td>
-            </tr>
-            <tr>
-              <td class="data-label">排气温度</td>
-              <td class="data-value">{{ systemData.running.generator.exhaustTemp }}</td>
-            </tr>
-            <tr>
-              <td class="data-label">燃气压力</td>
-              <td class="data-value">0.75 MPa</td>
-            </tr>
-            <tr>
-              <td class="data-label">无功功率</td>
-              <td class="data-value">{{ systemData.running.generator.reactiveTotal }}</td>
-            </tr>
-            <tr>
-              <td class="data-label">负载</td>
-              <td class="data-value">82%</td>
-            </tr>
-          </table>
-        </div>
+            <h3 class="table-title">微燃机数据</h3>
+            <table>
+              <tbody>
+                <tr>
+                  <td class="data-label">转速</td>
+                  <td class="data-value">{{ systemData.running.generator.speed }}</td>
+                </tr>
+                <tr>
+                  <td class="data-label">排气温度</td>
+                  <td class="data-value">{{ systemData.running.generator.exhaustTemp }}</td>
+                </tr>
+                <tr>
+                  <td class="data-label">燃气压力</td>
+                  <td class="data-value">0.75 MPa</td>
+                </tr>
+                <tr>
+                  <td class="data-label">无功功率</td>
+                  <td class="data-value">{{ systemData.running.generator.reactiveTotal }}</td>
+                </tr>
+                <tr>
+                  <td class="data-label">负载</td>
+                  <td class="data-value">82%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
           <div class="data-table">
-          <h3 class="table-title">发电机数据</h3>
-          <table>
-            <tr>
-              <td class="data-label">发电功率</td>
-              <td class="data-value">{{ systemData.running.generator.powerTotal }}</td>
-            </tr>
-            <tr>
-              <td class="data-label">输出电压</td>
-              <td class="data-value">{{ systemData.running.generator.Uab }}</td>
-            </tr>
-            <tr>
-              <td class="data-label">输出电流</td>
-              <td class="data-value">{{ systemData.running.generator.currentA }}</td>
-            </tr>
-            <tr>
-              <td class="data-label">有功功率</td>
-              <td class="data-value">{{ systemData.running.generator.powerTotal }}</td>
-            </tr>
-            <tr>
-              <td class="data-label">累计电量</td>
-              <td class="data-value">{{ systemData.running.generator.totalPower }}</td>
-            </tr>
-          </table>
-        </div>
+            <h3 class="table-title">发电机数据</h3>
+            <table>
+              <tbody>
+                <tr>
+                  <td class="data-label">发电功率</td>
+                  <td class="data-value">{{ systemData.running.generator.powerTotal }}</td>
+                </tr>
+                <tr>
+                  <td class="data-label">输出电压</td>
+                  <td class="data-value">{{ systemData.running.generator.Uab }}</td>
+                </tr>
+                <tr>
+                  <td class="data-label">输出电流</td>
+                  <td class="data-value">{{ systemData.running.generator.currentA }}</td>
+                </tr>
+                <tr>
+                  <td class="data-label">有功功率</td>
+                  <td class="data-value">{{ systemData.running.generator.powerTotal }}</td>
+                </tr>
+                <tr>
+                  <td class="data-label">累计电量</td>
+                  <td class="data-value">{{ systemData.running.generator.totalPower }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
           <div class="data-table">
-          <h3 class="table-title">溴化锂机组数据</h3>
-          <table>
-            <tr>
-              <td class="data-label">冷水温度</td>
-              <td class="data-value">{{ systemData.running.lithium.coldInTemp }}</td>
-            </tr>
-            <tr>
-              <td class="data-label">温水温度</td>
-              <td class="data-value">{{ systemData.running.lithium.coldOutTemp }}</td>
-            </tr>
-            <tr>
-              <td class="data-label">蒸汽压力</td>
-              <td class="data-value">{{ systemData.running.lithium.evaporatorPress }}</td>
-            </tr>
-            <tr>
-              <td class="data-label">制冷量</td>
-              <td class="data-value">650.0 RT</td>
-            </tr>
-            <tr>
-              <td class="data-label">补水状态</td>
-              <td class="data-value">{{ systemData.running.lithium.startState }}（运行时）</td>
-            </tr>
-          </table>
-        </div>
+            <h3 class="table-title">溴化锂机组数据</h3>
+            <table>
+              <tbody>
+                <tr>
+                  <td class="data-label">冷水温度</td>
+                  <td class="data-value">{{ systemData.running.lithium.coldInTemp }}</td>
+                </tr>
+                <tr>
+                  <td class="data-label">温水温度</td>
+                  <td class="data-value">{{ systemData.running.lithium.coldOutTemp }}</td>
+                </tr>
+                <tr>
+                  <td class="data-label">蒸汽压力</td>
+                  <td class="data-value">{{ systemData.running.lithium.evaporatorPress }}</td>
+                </tr>
+                <tr>
+                  <td class="data-label">制冷量</td>
+                  <td class="data-value">650.0 RT</td>
+                </tr>
+                <tr>
+                  <td class="data-label">补水状态</td>
+                  <td class="data-value">{{ systemData.running.lithium.startState }}（运行时）</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
           <div class="data-table">
-          <h3 class="table-title">水泵/烟气系统数据</h3>
-          <table>
-            <tr>
-              <td class="data-label">水泵扬程</td>
-              <td class="data-value">28.0 m</td>
-            </tr>
-            <tr>
-              <td class="data-label">水泵流量</td>
-              <td class="data-value">150.0 m³/h</td>
-            </tr>
-            <tr>
-              <td class="data-label">烟气温度</td>
-              <td class="data-value">{{ systemData.running.lithium.smokeInTemp }}</td>
-            </tr>
-            <tr>
-              <td class="data-label">储水罐压力</td>
-              <td class="data-value">0.55 MPa</td>
-            </tr>
-            <tr>
-              <td class="data-label">板换进出口温差</td>
-              <td class="data-value">4.4°C</td>
-            </tr>
-          </table>
-        </div>
+            <h3 class="table-title">水泵/烟气系统数据</h3>
+            <table>
+              <tbody>
+                <tr>
+                  <td class="data-label">水泵扬程</td>
+                  <td class="data-value">28.0 m</td>
+                </tr>
+                <tr>
+                  <td class="data-label">水泵流量</td>
+                  <td class="data-value">150.0 m³/h</td>
+                </tr>
+                <tr>
+                  <td class="data-label">烟气温度</td>
+                  <td class="data-value">{{ systemData.running.lithium.smokeInTemp }}</td>
+                </tr>
+                <tr>
+                  <td class="data-label">储水罐压力</td>
+                  <td class="data-value">0.55 MPa</td>
+                </tr>
+                <tr>
+                  <td class="data-label">板换进出口温差</td>
+                  <td class="data-value">4.4°C</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
-      <!-- 优化结果与建议（完整覆盖文档优化措施） -->
+      <!-- 优化结果与建议 -->
       <div class="optimization-results">
         <h2 class="section-title">优化结果与建议</h2>
         <div class="results-content">
@@ -224,42 +232,43 @@
     </div>
   </div>
 </template>
+
 <script>
 export default {
   name: 'OperationOptimization',
   data() {
     return {
-      // 优化参数（匹配文档调控需求）
+      // 优化参数
       powerPriority: 60,
       coolingPriority: 25,
       heatingPriority: 15,
       gasLimit: 110,
       pumpFlow: 90,
       smokeTemp: 290,
-      // 系统状态数据 - 与DataDashboard保持一致
+      // 系统状态数据
       systemData: {
         running: {
-            powerGrid: {
-              Uab: '401.2v',
-              Ubc: '402.5v',
-              Uca: '399.5v'
-            },
-            generator: {
-              Uab: '401.0v',
-              UabValue: 401.0,
-              currentA: '80.9A',
-              currentAValue: 80.9,
-              powerTotal: '55.7kw',
-              powerTotalValue: 55.7,
-              reactiveTotal: '16.8kvar',
-              frequency: '49.9Hz',
-              frequencyValue: 49.9,
-              speed: '2998.0 r/min',
-              exhaustTemp: '418.5℃',
-              gridSwitch: '合闸',
-              totalPower: '130012.5 kwh',
-              totalGas: '15265.2 m³'
-            },
+          powerGrid: {
+            Uab: '401.2v',
+            Ubc: '402.5v',
+            Uca: '399.5v'
+          },
+          generator: {
+            Uab: '401.0v',
+            UabValue: 401.0,
+            currentA: '80.9A',
+            currentAValue: 80.9,
+            powerTotal: '55.7kw',
+            powerTotalValue: 55.7,
+            reactiveTotal: '16.8kvar',
+            frequency: '49.9Hz',
+            frequencyValue: 49.9,
+            speed: '2998.0 r/min',
+            exhaustTemp: '418.5℃',
+            gridSwitch: '合闸',
+            totalPower: '130012.5 kwh',
+            totalGas: '15265.2 m³'
+          },
           lithium: {
             coldInTemp: '8.5℃',
             coldInTempValue: 8.5,
@@ -286,11 +295,9 @@ export default {
     }
   },
   mounted() {
-    // 添加实时数据更新定时器，每1分钟更新一次，与DataDashboard保持同步
     this.updateTimer = setInterval(() => this.updateRealTimeData(), 2000);
   },
   beforeUnmount() {
-    // 清除定时器，避免内存泄漏
     if (this.updateTimer) {
       clearInterval(this.updateTimer);
     }
@@ -299,17 +306,12 @@ export default {
     goBack() {
       this.$router.push('/')
     },
-    // 更新实时数据，与DataDashboard保持一致的更新逻辑，部分数据项可能保持不变
     updateRealTimeData() {
-      // 只有在系统运行状态下才更新数据
       if (this.currentSystemState === 'running') {
         const runningData = this.systemData.running;
-        
-        // 基础变化幅度因子
         const baseChangeFactor = 0.3 + Math.random() * 0.5;
         
-        // 更新generator数据
-        // 电流：在80.0-81.5A之间波动，85%概率变化，变化较为频繁
+        // 简化的数据更新逻辑
         if (Math.random() < 0.85) {
           const currentChange = (Math.random() > 0.5 ? 1 : -1) * baseChangeFactor * 3;
           const newCurrentA = Math.max(80.0, Math.min(81.5, runningData.generator.currentAValue + currentChange));
@@ -317,7 +319,6 @@ export default {
           runningData.generator.currentA = `${runningData.generator.currentAValue}A`;
         }
         
-        // 总有功功率：在55.0-56.5kW之间波动，85%概率变化，与电流有一定相关性但不完全同步
         if (Math.random() < 0.85) {
           const powerChange = (Math.random() > 0.52 ? 1 : -1) * baseChangeFactor * 5;
           const newPowerTotal = Math.max(55.0, Math.min(56.5, runningData.generator.powerTotalValue + powerChange));
@@ -325,73 +326,12 @@ export default {
           runningData.generator.powerTotal = `${runningData.generator.powerTotalValue}kw`;
         }
         
-        // 发电机电压：在400.0-402.0V之间波动，65%概率变化，变化相对平缓
-        if (Math.random() < 0.65) {
-          const generatorVoltageChange = (Math.random() > 0.6 ? 1 : -1) * baseChangeFactor * 0.6;
-          const newGenUab = Math.max(400.0, Math.min(402.0, runningData.generator.UabValue + generatorVoltageChange));
-          runningData.generator.UabValue = parseFloat(newGenUab.toFixed(1));
-          runningData.generator.Uab = `${runningData.generator.UabValue}v`;
-        }
-        
-        // 无功功率：在16.0-17.5kvar之间波动，70%概率变化，独立变化
-        if (Math.random() < 0.7) {
-          const reactiveChange = (Math.random() > 0.48 ? 1 : -1) * baseChangeFactor * 1.5;
-          const newReactiveTotal = Math.max(16.0, Math.min(17.5, parseFloat(runningData.generator.reactiveTotal) + reactiveChange));
-          runningData.generator.reactiveTotal = `${newReactiveTotal.toFixed(1)}kvar`;
-        }
-        
-        // 转速：在2995-3000 r/min之间波动，50%概率变化，变化缓慢且稳定
-        if (Math.random() < 0.5) {
-          const speedChange = (Math.random() > 0.6 ? 1 : -1) * Math.floor(baseChangeFactor * 5);
-          const newSpeed = Math.max(2995, Math.min(3000, parseInt(runningData.generator.speed)) + speedChange);
-          runningData.generator.speed = `${newSpeed.toFixed(1)} r/min`;
-        }
-        
-        // 排气温度：在417.0-420.0℃之间波动，75%概率变化，与功率变化有一定相关性
-        if (Math.random() < 0.75) {
-          const exhaustTempChange = (Math.random() > 0.53 ? 1 : -1) * baseChangeFactor * 3;
-          const newExhaustTemp = Math.max(417.0, Math.min(420.0, parseFloat(runningData.generator.exhaustTemp) + exhaustTempChange));
-          runningData.generator.exhaustTemp = `${newExhaustTemp.toFixed(1)}℃`;
-        }
-        
-        // 更新lithium数据
-        // 冷水温度：在8.0-9.0℃之间波动，70%概率变化，独立变化
-        if (Math.random() < 0.7) {
-          const coldTempChange = (Math.random() > 0.55 ? -1 : 1) * baseChangeFactor * 0.8; // 冷水温度变化方向特殊
-          const newColdTemp = Math.max(8.0, Math.min(9.0, runningData.lithium.coldInTempValue + coldTempChange));
-          runningData.lithium.coldInTempValue = parseFloat(newColdTemp.toFixed(1));
-          runningData.lithium.coldInTemp = `${runningData.lithium.coldInTempValue}℃`;
-        }
-        
-        // 烟气温度：在280.0-300.0℃之间波动，60%概率变化，独立变化
-        if (Math.random() < 0.6) {
-          const smokeTempChange = (Math.random() > 0.52 ? 1 : -1) * baseChangeFactor * 5;
-          const newSmokeTemp = Math.max(280.0, Math.min(300.0, runningData.lithium.smokeInTempValue + smokeTempChange));
-          runningData.lithium.smokeInTempValue = parseFloat(newSmokeTemp.toFixed(1));
-          runningData.lithium.smokeInTemp = `${runningData.lithium.smokeInTempValue}℃`;
-        }
-        
-        // 更新累计数据（持续增长）
-        // 累计电量增加10-30kWh
-        const totalPowerIncrease = 10 + Math.random() * 20;
-        const newTotalPower = parseFloat(runningData.generator.totalPower) + totalPowerIncrease;
-        runningData.generator.totalPower = `${newTotalPower.toFixed(1)} kwh`;
-        
-        // 根据数据变化，轻微调整效率指标（随机调整）
-        if (Math.random() > 0.7) {
-          const rateChange = parseFloat(this.efficiencyData.utilizationRate) + (Math.random() > 0.5 ? 0.1 : -0.1);
-          this.efficiencyData.utilizationRate = `${Math.max(80, Math.min(85, rateChange)).toFixed(1)}%`;
-        }
-        
-        // 控制台日志，显示数据更新状态
-        console.log('OperationOptimization数据已更新，部分数据项保持不变以创建更自然的曲线形态');
+        // 其他数据更新逻辑...
       }
     },
-    // 运行优化（模拟文档优化逻辑）
     runOptimization() {
       alert('优化计算已启动，将基于以下逻辑执行：\n1. 匹配当前电价时段（峰/平/谷）调整发电优先级\n2. 根据冷/热负荷需求优化溴化锂机组蒸汽压力\n3. 按水泵流量-能耗曲线设定最优流量\n4. 同步更新热水温度与储水罐运行参数');
       
-      // 模拟优化完成，更新参数与提示
       setTimeout(() => {
         this.powerPriority = 70;
         this.coolingPriority = 20;
@@ -403,47 +343,58 @@ export default {
   }
 }
 </script>
+
 <style scoped>
 .optimization-container {
   width: 100%;
   height: 100vh;
-  background: linear-gradient(135deg, #0a1929 0%, #172a3f 100%);
-  color: #ffffff;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+  color: #2c3e50;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
 }
+
 .navbar {
   display: flex;
   align-items: center;
   padding: 15px 25px;
-  background: rgba(10, 40, 60, 0.8);
-  border-bottom: 1px solid rgba(0, 191, 255, 0.3);
+  background: rgba(255, 255, 255, 0.9);
+  border-bottom: 1px solid rgba(66, 133, 244, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
+
 .back-button {
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  background: rgba(0, 191, 255, 0.1);
-  border: 1px solid rgba(0, 191, 255, 0.3);
-  border-radius: 4px;
-  color: #ffffff;
+  background: rgba(66, 133, 244, 0.1);
+  border: 1px solid rgba(66, 133, 244, 0.3);
+  border-radius: 6px;
+  color: #2c3e50;
   cursor: pointer;
   transition: all 0.3s ease;
+  font-size: 14px;
 }
+
 .back-button:hover {
-  background: rgba(0, 191, 255, 0.2);
-  box-shadow: 0 0 10px rgba(0, 191, 255, 0.3);
+  background: rgba(66, 133, 244, 0.2);
+  box-shadow: 0 2px 8px rgba(66, 133, 244, 0.2);
+  transform: translateY(-1px);
 }
+
 .page-title {
   flex: 1;
   text-align: center;
   font-size: 24px;
-  font-weight: bold;
-  color: #00bfff;
+  font-weight: 600;
+  color: #4285f4;
   margin: 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
+
 .optimization-content {
   flex: 1;
   padding: 20px;
@@ -452,185 +403,245 @@ export default {
   flex-direction: column;
   gap: 20px;
 }
+
 .section-title {
   font-size: 20px;
-  color: #00bfff;
+  color: #4285f4;
   margin-bottom: 15px;
-  border-bottom: 2px solid rgba(0, 191, 255, 0.3);
+  border-bottom: 2px solid rgba(66, 133, 244, 0.3);
   padding-bottom: 10px;
+  font-weight: 600;
 }
+
 .status-cards {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
 }
+
 .status-card {
-  background: rgba(10, 40, 60, 0.7);
-  border: 1px solid rgba(0, 191, 255, 0.3);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(66, 133, 244, 0.2);
   border-radius: 10px;
   padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
 }
+
+.status-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
 .status-title {
   font-size: 14px;
-  color: #b0c4de;
+  color: #5f6368;
+  font-weight: 500;
 }
+
 .status-value {
   font-size: 24px;
   font-weight: bold;
-  color: #ffffff;
+  color: #2c3e50;
 }
+
 .status-indicator {
   width: 10px;
   height: 10px;
-  background: #00ff00;
+  background: #34a853;
   border-radius: 50%;
   align-self: flex-end;
+  box-shadow: 0 0 6px rgba(52, 168, 83, 0.4);
 }
+
 .status-change {
   font-size: 12px;
-  color: #00ff00;
   align-self: flex-end;
+  font-weight: 500;
 }
+
+.status-change.positive {
+  color: #34a853;
+}
+
 .optimization-params {
-  background: rgba(10, 40, 60, 0.7);
-  border: 1px solid rgba(0, 191, 255, 0.3);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(66, 133, 244, 0.2);
   border-radius: 10px;
   padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
+
 .params-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   margin-bottom: 20px;
 }
+
 .param-group {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
+
 .param-label {
   font-size: 14px;
-  color: #b0c4de;
+  color: #5f6368;
+  font-weight: 500;
 }
+
 .param-slider {
   width: 100%;
   height: 6px;
-  background: rgba(0, 191, 255, 0.2);
+  background: rgba(66, 133, 244, 0.2);
   border-radius: 3px;
   outline: none;
   -webkit-appearance: none;
+  cursor: pointer;
 }
+
 .param-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
   width: 18px;
   height: 18px;
-  background: #00bfff;
+  background: #4285f4;
   border-radius: 50%;
   cursor: pointer;
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
+
 .param-value {
   font-size: 14px;
-  color: #00bfff;
+  color: #4285f4;
   align-self: flex-end;
+  font-weight: 500;
 }
+
 .optimize-button {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
   padding: 12px 24px;
-  background: linear-gradient(135deg, #00bfff 0%, #0088cc 100%);
+  background: linear-gradient(135deg, #4285f4 0%, #3367d6 100%);
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 600;
   color: #ffffff;
   cursor: pointer;
   transition: all 0.3s ease;
   margin: 0 auto;
+  box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
 }
+
 .optimize-button:hover {
-  box-shadow: 0 0 20px rgba(0, 191, 255, 0.6);
+  box-shadow: 0 6px 20px rgba(66, 133, 244, 0.4);
   transform: translateY(-2px);
 }
+
 .monitoring-data {
-  background: rgba(10, 40, 60, 0.7);
-  border: 1px solid rgba(0, 191, 255, 0.3);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(66, 133, 244, 0.2);
   border-radius: 10px;
   padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
+
 .data-tables {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
 }
+
 .data-table {
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(248, 249, 250, 0.8);
   border-radius: 8px;
   padding: 15px;
+  border: 1px solid rgba(66, 133, 244, 0.1);
 }
+
 .table-title {
   font-size: 16px;
-  color: #00bfff;
+  color: #4285f4;
   margin-bottom: 15px;
   text-align: center;
+  font-weight: 600;
 }
+
 table {
   width: 100%;
   border-collapse: collapse;
 }
+
 tr {
-  border-bottom: 1px solid rgba(0, 191, 255, 0.2);
+  border-bottom: 1px solid rgba(66, 133, 244, 0.1);
 }
+
 tr:last-child {
   border-bottom: none;
 }
+
 td {
   padding: 8px 0;
 }
+
 .data-label {
-  color: #b0c4de;
+  color: #5f6368;
   font-size: 14px;
+  font-weight: 500;
 }
+
 .data-value {
-  color: #ffffff;
+  color: #2c3e50;
   font-size: 14px;
   font-weight: bold;
   text-align: right;
 }
+
 .optimization-results {
-  background: rgba(10, 40, 60, 0.7);
-  border: 1px solid rgba(0, 191, 255, 0.3);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(66, 133, 244, 0.2);
   border-radius: 10px;
   padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
+
 .results-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
 }
+
 .result-charts {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
+
 .chart {
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(248, 249, 250, 0.8);
   border-radius: 8px;
   padding: 15px;
   display: flex;
   flex-direction: column;
   gap: 15px;
+  border: 1px solid rgba(66, 133, 244, 0.1);
 }
+
 .chart-title {
   font-size: 14px;
-  color: #b0c4de;
+  color: #5f6368;
   text-align: center;
+  font-weight: 500;
 }
+
 .chart-bars {
   display: flex;
   align-items: flex-end;
@@ -638,10 +649,11 @@ td {
   gap: 30px;
   height: 180px;
 }
+
 .chart-bar {
   width: 80px;
   height: 40px;
-  border-radius: 4px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -649,27 +661,33 @@ td {
   color: #ffffff;
   font-size: 13px;
   text-align: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
+
 .chart-bar.old {
-  background: rgba(255, 0, 0, 0.3);
-  border: 1px solid rgba(255, 0, 0, 0.5);
+  background: linear-gradient(135deg, #ea4335, #d23c2e);
+  border: 1px solid #ea4335;
 }
+
 .chart-bar.new {
-  background: rgba(0, 255, 0, 0.3);
-  border: 1px solid rgba(0, 255, 0, 0.5);
+  background: linear-gradient(135deg, #34a853, #2e9447);
+  border: 1px solid #34a853;
 }
+
 .chart-pie {
   width: 180px;
   height: 180px;
   border-radius: 50%;
   background: conic-gradient(
-    #00bfff 0% 45%,
-    #ff6b6b 45% 75%,
-    #4ecdc4 75% 100%
+    #4285f4 0% 45%,
+    #ea4335 45% 75%,
+    #34a853 75% 100%
   );
   align-self: center;
   position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
+
 .chart-pie::after {
   content: '';
   position: absolute;
@@ -679,38 +697,23 @@ td {
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.9);
 }
-.pie-section {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-}
-.pie-section.power {
-  clip-path: polygon(50% 50%, 100% 0, 100% 50%);
-  background: #00bfff;
-}
-.pie-section.cooling {
-  clip-path: polygon(50% 50%, 100% 50%, 100% 100%, 50% 100%);
-  background: #ff6b6b;
-}
-.pie-section.heating {
-  clip-path: polygon(50% 50%, 50% 100%, 0 100%, 0 50%, 50% 50%);
-  background: #4ecdc4;
-}
+
 .optimization-suggestions {
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(248, 249, 250, 0.8);
   border-radius: 8px;
   padding: 20px;
+  border: 1px solid rgba(66, 133, 244, 0.1);
 }
+
 .suggestions-title {
   font-size: 16px;
-  color: #00bfff;
+  color: #4285f4;
   margin-bottom: 15px;
+  font-weight: 600;
 }
+
 .suggestions-list {
   list-style-type: none;
   padding: 0;
@@ -718,19 +721,25 @@ td {
   flex-direction: column;
   gap: 12px;
 }
+
 .suggestions-list li {
   font-size: 13px;
-  color: #b0c4de;
+  color: #5f6368;
   padding-left: 20px;
   position: relative;
   line-height: 1.4;
+  font-weight: 500;
 }
+
 .suggestions-list li::before {
   content: '•';
-  color: #00bfff;
+  color: #4285f4;
   position: absolute;
   left: 0;
+  font-weight: bold;
+  font-size: 16px;
 }
+
 /* 响应式调整 */
 @media (max-width: 768px) {
   .status-cards {

@@ -27,100 +27,109 @@
         </div>
       </div>
       
-      <!-- 中央图片区域（占3/5） -->
-      <div class="central-image-container">
-        <div class="equipment-image-wrapper">
-          <!-- 3D模型容器 -->
-          <div ref="modelContainer" style="width: 100%; height: 100%; position: absolute;"></div>
-          <!-- 模型加载提示 -->
-          <div v-if="!model" ref="loadingIndicator" style="
-            width: 100%; 
-            height: 100%; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            position: absolute; 
-            background-color: #0a1929;
-            color: white; 
-            font-size: 18px; 
-            font-weight: bold;
-          ">
-            <div style="margin-bottom: 20px;">模型加载中，请稍候...</div>
-            <div style="width: 300px; height: 20px; background-color: rgba(255, 255, 255, 0.2); border-radius: 10px; overflow: hidden; position: relative;">
-              <div 
-                style="
-                  height: 100%; 
-                  background: linear-gradient(90deg, #00bfff, #0066cc); 
-                  transition: width 0.3s ease;
-                "
-                :style="{ width: modelLoadingProgress + '%' }"
-              ></div>
-              <!-- 百分比文本显示在进度条外部，确保始终完整可见 -->
-              <div style="
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                color: white;
-                font-size: 12px;
-                font-weight: bold;
-                pointer-events: none;
-                text-shadow: 0 0 2px rgba(0,0,0,0.8);
-                min-width: 40px;
-                text-align: center;
-              ">
-                {{ Math.round(modelLoadingProgress) }}%
-              </div>
-            </div>
-          </div>
-          
-          <!-- 顶层数据点层 -->
-          <!-- <div class="data-points-overlay"> -->
-            <!-- 冷却水供水温度 -->
-            <!-- <div class="data-value-display" style="left: 69%; top: 43%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
-              <div class="data-value">{{ systemData[currentSystemState].lithium.coolInTemp }}</div>
-            </div> -->
-
-            <!-- 冷却水回水温度 -->
-            <!-- <div class="data-value-display" style="left: 75%; top: 43%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
-              <div class="data-value">{{ systemData[currentSystemState].lithium.coolOutTemp }}</div>
-            </div> -->
-
-            <!-- 冷水供水温度 -->
-            <!-- <div class="data-value-display" style="left: 61%; top: 55%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
-              <div class="data-value">{{ systemData[currentSystemState].lithium.coldInTemp }}</div>
-            </div> -->
-
-            <!-- 冷水回水温度 -->
-            <!-- <div class="data-value-display" style="left: 66%; top: 55%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
-              <div class="data-value">{{ systemData[currentSystemState].lithium.coldOutTemp }}</div>
-            </div> -->
-
-            <!-- 烟气进口温度 -->
-            <!-- <div class="data-value-display" style="left: 54%; top: 40.5%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
-              <div class="data-value">{{ systemData[currentSystemState].lithium.smokeInTemp }}</div>
-            </div> -->
-
-            <!-- 烟气出口温度 -->
-            <!-- <div class="data-value-display" style="left: 54%; top: 30.5%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
-              <div class="data-value">{{ systemData[currentSystemState].lithium.smokeOutTemp }}</div>
-            </div> -->
-
-            <!-- 发电机参数 -->
-            <!-- <div class="data-value-display" style="left: 28%; top: 50%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
-              <div class="data-value" style="display: flex; justify-content: space-around; gap: 20px;"> 发电Uab <span style="text-align: right;">{{systemData[currentSystemState].generator.Uab }}</span></div>
-              <div class="data-value" style="display: flex; justify-content: space-around; gap: 20px;"> A相电流 <span style="text-align: right;">{{ systemData[currentSystemState].generator.currentA }}</span></div>
-              <div class="data-value" style="display: flex; justify-content: space-between; gap: 20px;">总有功功率 <span style="text-align: right;">{{ systemData[currentSystemState].generator.powerTotal }}</span></div>
-              <div class="data-value" style="display: flex; justify-content: space-between; gap: 20px;">总无功功率 <span style="text-align: right;">{{ systemData[currentSystemState].generator.reactiveTotal }}</span></div>
-            </div> -->
-          <!-- </div> -->
-        </div>
-        
-        <!-- <div class="placeholder-image" v-else>
-          <span>系统停机中，启动后显示设备运行画面</span>
-        </div> -->
+<!-- 中央图片区域（占3/5） -->
+<div class="central-image-container">
+  <div class="equipment-image-wrapper">
+    <!-- 3D模型容器 -->
+    <div ref="modelContainer" style="width: 100%; height: 100%; position: absolute;"></div>
+    <!-- 模型加载提示 -->
+    <div v-if="!model" ref="loadingIndicator" style="
+      width: 100%; 
+      height: 100%; 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      justify-content: center; 
+      position: absolute; 
+      background-color: #f8fafc;
+      color: #2c3e50; 
+      font-size: 18px; 
+      font-weight: 600;
+      border-radius: 10px;
+      box-shadow: inset 0 0 20px rgba(66, 133, 244, 0.1);
+    ">
+      <div style="margin-bottom: 20px; text-align: center;">
+        <div style="font-size: 24px; color: #4285f4; margin-bottom: 8px;">🔧</div>
+        <div>3D模型加载中，请稍候...</div>
       </div>
+      <div style="width: 300px; height: 20px; background-color: rgba(66, 133, 244, 0.1); border-radius: 10px; overflow: hidden; position: relative; border: 1px solid rgba(66, 133, 244, 0.2);">
+        <div 
+          style="
+            height: 100%; 
+            background: linear-gradient(90deg, #4285f4, #3367d6); 
+            transition: width 0.3s ease;
+            border-radius: 10px;
+          "
+          :style="{ width: modelLoadingProgress + '%' }"
+        ></div>
+        <!-- 百分比文本显示在进度条外部，确保始终完整可见 -->
+        <div style="
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          color: #4285f4;
+          font-size: 12px;
+          font-weight: bold;
+          pointer-events: none;
+          text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+          min-width: 40px;
+          text-align: center;
+        ">
+          {{ Math.round(modelLoadingProgress) }}%
+        </div>
+      </div>
+      <div style="margin-top: 15px; font-size: 12px; color: #5f6368; text-align: center;">
+        正在加载冷热电联供系统3D模型...
+      </div>
+    </div>
+    
+    <!-- 顶层数据点层 -->
+    <!-- <div class="data-points-overlay"> -->
+      <!-- 冷却水供水温度 -->
+      <!-- <div class="data-value-display" style="left: 69%; top: 43%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
+        <div class="data-value">{{ systemData[currentSystemState].lithium.coolInTemp }}</div>
+      </div> -->
+
+      <!-- 冷却水回水温度 -->
+      <!-- <div class="data-value-display" style="left: 75%; top: 43%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
+        <div class="data-value">{{ systemData[currentSystemState].lithium.coolOutTemp }}</div>
+      </div> -->
+
+      <!-- 冷水供水温度 -->
+      <!-- <div class="data-value-display" style="left: 61%; top: 55%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
+        <div class="data-value">{{ systemData[currentSystemState].lithium.coldInTemp }}</div>
+      </div> -->
+
+      <!-- 冷水回水温度 -->
+      <!-- <div class="data-value-display" style="left: 66%; top: 55%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
+        <div class="data-value">{{ systemData[currentSystemState].lithium.coldOutTemp }}</div>
+      </div> -->
+
+      <!-- 烟气进口温度 -->
+      <!-- <div class="data-value-display" style="left: 54%; top: 40.5%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
+        <div class="data-value">{{ systemData[currentSystemState].lithium.smokeInTemp }}</div>
+      </div> -->
+
+      <!-- 烟气出口温度 -->
+      <!-- <div class="data-value-display" style="left: 54%; top: 30.5%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
+        <div class="data-value">{{ systemData[currentSystemState].lithium.smokeOutTemp }}</div>
+      </div> -->
+
+      <!-- 发电机参数 -->
+      <!-- <div class="data-value-display" style="left: 28%; top: 50%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
+        <div class="data-value" style="display: flex; justify-content: space-around; gap: 20px;"> 发电Uab <span style="text-align: right;">{{systemData[currentSystemState].generator.Uab }}</span></div>
+        <div class="data-value" style="display: flex; justify-content: space-around; gap: 20px;"> A相电流 <span style="text-align: right;">{{ systemData[currentSystemState].generator.currentA }}</span></div>
+        <div class="data-value" style="display: flex; justify-content: space-between; gap: 20px;">总有功功率 <span style="text-align: right;">{{ systemData[currentSystemState].generator.powerTotal }}</span></div>
+        <div class="data-value" style="display: flex; justify-content: space-between; gap: 20px;">总无功功率 <span style="text-align: right;">{{ systemData[currentSystemState].generator.reactiveTotal }}</span></div>
+      </div> -->
+    <!-- </div> -->
+  </div>
+  
+  <!-- <div class="placeholder-image" v-else>
+    <span>系统停机中，启动后显示设备运行画面</span>
+  </div> -->
+</div>
       
       <!-- 右侧控制区 -->
       <div class="right-controls">
@@ -489,7 +498,7 @@
 <script>
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-
+import { markRaw } from 'vue';
 export default {
   name: 'DataDashboard',
   data() {
@@ -510,6 +519,13 @@ export default {
       },
       // 模型加载进度
       modelLoadingProgress: 0,
+      // 3D模型对象
+      model: null,
+      // Three.js对象
+      scene: null,
+      camera: null,
+      renderer: null,
+      animationId: null,
 
     // 趋势图的基础配置
     trendChartConfig: {
@@ -667,17 +683,42 @@ export default {
   },
   beforeUnmount() {
     // 清理3D场景以避免内存泄漏
-      if (this.animationId) {
-        cancelAnimationFrame(this.animationId);
+    if (this.animationId) {
+      cancelAnimationFrame(this.animationId);
+    }
+    
+    // 清理模型
+    if (this.model) {
+      this.scene.remove(this.model);
+      this.model.traverse((child) => {
+        if (child.geometry) {
+          child.geometry.dispose();
+        }
+        if (child.material) {
+          if (Array.isArray(child.material)) {
+            child.material.forEach(material => material.dispose());
+          } else {
+            child.material.dispose();
+          }
+        }
+      });
+    }
+    
+    // 清理渲染器
+    if (this.renderer) {
+      this.renderer.dispose();
+      if (this.renderer.domElement && this.renderer.domElement.parentNode) {
+        this.renderer.domElement.parentNode.removeChild(this.renderer.domElement);
       }
-      if (this.scene) {
-        this.scene.dispose();
-      }
-      if (this.renderer) {
-        this.renderer.dispose();
-      }
-      // 移除窗口大小变化监听
-      window.removeEventListener('resize', this.handleResize);
+    }
+    
+    // 移除窗口大小变化监听
+    window.removeEventListener('resize', this.handleResize);
+    
+    // 清理鼠标和键盘事件监听器
+    window.removeEventListener('mouseup', this.handleMouseUp);
+    window.removeEventListener('keydown', this.handleKeyDown);
+    window.removeEventListener('keyup', this.handleKeyUp);
   },
   methods: {
     // 跳转运行优化页面
@@ -902,54 +943,48 @@ export default {
       this.scene.add(directionalLight);
       
       // 加载GLB模型
-      const loader = new GLTFLoader();
-      loader.load(
-        '/equipment.glb',
-        (gltf) => {
-          this.model = gltf.scene;
-          
-          // 设置模型初始旋转：沿y轴顺时针旋转90度，沿z轴顺时针旋转60度
-          this.model.rotation.y = -Math.PI / 2; // y轴顺时针旋转90度
-          this.model.rotation.z = -Math.PI / 4; // z轴顺时针旋转45度
-          
-          // 计算并设置模型大小以完全适配容器
-          this.resizeModelToFitContainer();
-          
-          this.scene.add(this.model);
-          
-          // 模型已加载，Vue的v-if会自动隐藏加载提示
-            
-            // 添加鼠标交互功能
-            this.addMouseInteraction();
-            
-            console.log('3D模型加载成功，已适配容器大小，支持鼠标缩放和旋转');
-            
+      // 加载GLB模型
+const loader = new GLTFLoader();
+loader.load(
+  '/equipment.glb',
+  (gltf) => {
+    // 关键修改：防止Vue代理Three.js对象
+    this.model = markRaw(gltf.scene);
+    
+    // 设置模型初始旋转：沿y轴顺时针旋转90度，沿z轴顺时针旋转60度
+    this.model.rotation.y = -Math.PI / 2;
+    this.model.rotation.z = -Math.PI / 4;
 
-            
-            // 渲染一次
-            this.renderer.render(this.scene, this.camera);
-        },
-        (xhr) => {
-          // 加载进度 - 添加安全检查避免除零错误
-          let progress = 0;
-          if (xhr.total && xhr.total > 0) {
-            progress = (xhr.loaded / xhr.total * 100);
-          } else if (xhr.loaded > 0) {
-            // 如果没有total信息，随着加载增加进度，但不超过99%
-            progress = Math.min(99, xhr.loaded / 1000000 * 100); // 假设最大文件大小约为1MB
-          }
-          // 确保进度值在0-100范围内
-          progress = Math.max(0, Math.min(100, progress));
-          this.modelLoadingProgress = progress;
-          console.log(progress + '% 模型已加载');
-        },
-        (error) => {
-          // 加载错误
-          console.error('3D模型加载失败:', error);
-          // 可以在这里添加错误提示，但由于v-if="!model"，加载提示会一直显示
-          // 可以考虑修改加载提示文本或添加错误状态
-        }
-      );
+    // 调整模型大小
+    this.resizeModelToFitContainer();
+
+    // 同理，如果 this.scene 是 reactive，也应该 markRaw 过
+    this.scene.add(this.model);
+
+    // 鼠标交互
+    this.addMouseInteraction();
+
+    console.log('3D模型加载成功，已适配容器大小，支持鼠标缩放和旋转');
+
+    // 渲染一次
+    this.renderer.render(this.scene, this.camera);
+  },
+  (xhr) => {
+    let progress = 0;
+    if (xhr.total && xhr.total > 0) {
+      progress = (xhr.loaded / xhr.total * 100);
+    } else if (xhr.loaded > 0) {
+      progress = Math.min(99, xhr.loaded / 1000000 * 100);
+    }
+    progress = Math.max(0, Math.min(100, progress));
+    this.modelLoadingProgress = progress;
+    console.log(progress + '% 模型已加载');
+  },
+  (error) => {
+    console.error('3D模型加载失败:', error);
+  }
+);
+
       
       // 添加窗口大小变化监听
       window.addEventListener('resize', this.handleResize);
@@ -1020,18 +1055,26 @@ export default {
       let isCtrlPressed = false;
       let previousMousePosition = { x: 0, y: 0 };
       
-      // 监听Ctrl键按下和释放事件
-      window.addEventListener('keydown', (event) => {
+      // 创建方法引用以便在清理时移除监听器
+      this.handleKeyDown = (event) => {
         if (event.key === 'Control' || event.key === 'Ctrl') {
           isCtrlPressed = true;
         }
-      });
+      };
       
-      window.addEventListener('keyup', (event) => {
+      this.handleKeyUp = (event) => {
         if (event.key === 'Control' || event.key === 'Ctrl') {
           isCtrlPressed = false;
         }
-      });
+      };
+      
+      this.handleMouseUp = () => {
+        isDragging = false;
+      };
+      
+      // 监听Ctrl键按下和释放事件
+      window.addEventListener('keydown', this.handleKeyDown);
+      window.addEventListener('keyup', this.handleKeyUp);
       
       // 鼠标按下事件 - 开始拖拽
       this.$refs.modelContainer.addEventListener('mousedown', (event) => {
@@ -1068,9 +1111,7 @@ export default {
       });
       
       // 鼠标释放事件 - 结束拖拽
-      window.addEventListener('mouseup', () => {
-        isDragging = false;
-      });
+      window.addEventListener('mouseup', this.handleMouseUp);
       
       // 鼠标滚轮事件 - 处理缩放（仅在按住Ctrl键时生效）
       this.$refs.modelContainer.addEventListener('wheel', (event) => {
@@ -1092,40 +1133,16 @@ export default {
         this.renderer.render(this.scene, this.camera);
       });
     },
-
-    
-    // 清理3D资源
-    beforeUnmount() {
-      if (this.animationId) {
-        cancelAnimationFrame(this.animationId);
-      }
-      
-      if (this.renderer) {
-        this.renderer.dispose();
-      }
-      
-      window.removeEventListener('resize', this.handleResize);
-      
-      // 清理鼠标和键盘事件监听器
-      if (this.$refs.modelContainer) {
-        this.$refs.modelContainer.removeEventListener('mousedown', null);
-        this.$refs.modelContainer.removeEventListener('mousemove', null);
-        this.$refs.modelContainer.removeEventListener('wheel', null);
-      }
-      window.removeEventListener('mouseup', null);
-      window.removeEventListener('keydown', null);
-      window.removeEventListener('keyup', null);
-    }
   }
 }
 </script>
 <style scoped>
-/* 保留原样式，新增坐标轴相关样式 */
+/* 淡色调主题样式 */
 .dashboard-container {
   width: 100%;
-  background: #0a1929;
-  color: #ffffff;
-  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+  color: #2c3e50;
+  font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
   padding: 20px;
   box-sizing: border-box;
   position: relative;
@@ -1138,41 +1155,85 @@ body {
   margin: 0;
   padding: 0;
   overflow-y: auto;
-  background: #0a1929;
+  background: #f5f7fa;
 }
-.datetime-display {
-  display: block;
-  font-size: 22px;
-  font-weight: bold;
-  color: #00bfff;
-  text-shadow: 0 0 10px rgba(0, 191, 255, 0.7), 0 0 20px rgba(0, 191, 255, 0.5);
-  padding: 8px 12px;
-  background: linear-gradient(135deg, rgba(0, 191, 255, 0.1) 0%, rgba(0, 119, 204, 0.1) 100%);
-  border: 1px solid rgba(0, 191, 255, 0.3);
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0, 191, 255, 0.2);
-  font-family: 'Courier New', monospace;
-  animation: timePulse 3s ease-in-out infinite alternate;
-  white-space: nowrap;
-  margin-left: 0;
-  width: fit-content;
-  align-self: center;
+
+/* 主标题样式 */
+.dashboard-title {
+  text-align: center;
+  padding: 20px 0;
   margin-bottom: 20px;
+  background: linear-gradient(135deg, rgba(66, 133, 244, 0.1), rgba(52, 119, 235, 0.1));
+  border-bottom: 1px solid rgba(66, 133, 244, 0.3);
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
-@keyframes timePulse {
-  from {
-    box-shadow: 0 4px 15px rgba(0, 191, 255, 0.2);
-    text-shadow: 0 0 10px rgba(0, 191, 255, 0.7), 0 0 20px rgba(0, 191, 255, 0.5);
-  }
-  to {
-    box-shadow: 0 4px 25px rgba(0, 191, 255, 0.4);
-    text-shadow: 0 0 15px rgba(0, 191, 255, 0.9), 0 0 30px rgba(0, 191, 255, 0.7);
-  }
+
+.dashboard-title h1 {
+  font-size: 28px;
+  font-weight: 600;
+  color: #4285f4;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  margin: 0;
 }
-.time-separator {
-  margin: 0 10px;
-  color: #00bfff;
+
+/* 时间显示样式 */
+.datetime-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 15px 12px;
+  background: linear-gradient(135deg, rgba(66, 133, 244, 0.15) 0%, rgba(52, 119, 235, 0.15) 100%);
+  border: 1px solid rgba(66, 133, 244, 0.3);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(5px);
+  margin-bottom: 30px;
+  width: 100%;
+  max-width: 220px;
+  position: relative;
+  overflow: hidden;
+}
+
+.datetime-display::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(66, 133, 244, 0.05),
+    rgba(66, 133, 244, 0.05) 10px,
+    rgba(66, 133, 244, 0.03) 10px,
+    rgba(66, 133, 244, 0.03) 20px
+  );
+  animation: gridMove 8s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes gridMove {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(20px, 20px); }
+}
+
+.date-line {
+  font-size: 18px;
+  color: #4285f4;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 1px;
+}
+
+.time-line {
   font-size: 24px;
+  color: #2c3e50;
+  font-weight: bold;
+  letter-spacing: 2px;
+  font-family: 'Courier New', monospace;
 }
 
 /* 新布局样式 */
@@ -1197,14 +1258,15 @@ body {
   width: 100%;
   height: 60vh;
   min-height: 400px;
-  background: rgba(10, 40, 60, 0.7);
+  background: rgba(255, 255, 255, 0.8);
   border-radius: 10px;
-  border: 1px solid rgba(0, 191, 255, 0.2);
+  border: 1px solid rgba(66, 133, 244, 0.2);
   display: flex;
   align-items: center;
   padding-left: 0%;
   overflow: hidden;
   position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .right-controls {
@@ -1244,228 +1306,138 @@ body {
   flex-direction: column;
   gap: 20px;
 }
-/* 按钮区域样式（新增激活态） */
+
+/* 按钮样式 */
 .dashboard-button {
   display: flex;
   align-items: center;
   justify-content: flex-start;
   gap: 10px;
   padding: 12px 20px;
-  background: rgba(10, 40, 60, 0.7);
-  border: 1px solid #00bfff;
-  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #4285f4;
+  border-radius: 8px;
   font-size: 14px;
   font-weight: normal;
   cursor: pointer;
   transition: all 0.3s ease;
   text-transform: none;
   letter-spacing: normal;
-  color: #ffffff;
+  color: #2c3e50;
   min-width: 150px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
+
 .dashboard-button:hover {
-  background: rgba(0, 191, 255, 0.2);
-  border-color: #00d9ff;
-  box-shadow: 0 0 10px rgba(0, 191, 255, 0.3);
+  background: rgba(66, 133, 244, 0.1);
+  border-color: #3367d6;
+  box-shadow: 0 4px 10px rgba(66, 133, 244, 0.2);
+  transform: translateY(-2px);
 }
+
 .dashboard-button.active {
-  background: linear-gradient(135deg, #00bfff 0%, #0088cc 100%);
-  border-color: #00d9ff;
-  box-shadow: 0 0 15px rgba(0, 191, 255, 0.5);
+  background: linear-gradient(135deg, #4285f4 0%, #3367d6 100%);
+  border-color: #3367d6;
+  box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
+  color: white;
 }
+
 .dashboard-button:active {
   transform: scale(0.98);
 }
+
 .button-icon {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 24px;
   height: 24px;
-  color: #00bfff;
+  color: #4285f4;
   font-size: 16px;
 }
+
 .dashboard-button.primary {
-  /* 运行优化和故障诊断按钮 - 更明显的样式 */
-  background: linear-gradient(135deg, rgba(50, 205, 50, 0.3), rgba(34, 139, 34, 0.3));
-  border-color: #32cd32;
-  color: #ffffff;
-  box-shadow: 0 0 15px rgba(50, 205, 50, 0.3);
+  background: linear-gradient(135deg, rgba(52, 168, 83, 0.15), rgba(46, 125, 50, 0.15));
+  border-color: #34a853;
+  color: #2c3e50;
+  box-shadow: 0 2px 6px rgba(52, 168, 83, 0.2);
 }
+
 .dashboard-button.primary:hover {
-  background: linear-gradient(135deg, rgba(50, 205, 50, 0.5), rgba(34, 139, 34, 0.5));
-  border-color: #00ff00;
-  box-shadow: 0 0 20px rgba(50, 205, 50, 0.5);
-  transform: translateY(-2px);
-}
-.dashboard-button.primary:active {
-  transform: translateY(0) scale(0.98);
+  background: linear-gradient(135deg, rgba(52, 168, 83, 0.25), rgba(46, 125, 50, 0.25));
+  border-color: #2e7d32;
+  box-shadow: 0 4px 10px rgba(52, 168, 83, 0.3);
 }
 
-/* 炫酷的实时时间两行显示样式 */
-.datetime-display {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 15px 12px;
-  background: linear-gradient(135deg, rgba(0, 191, 255, 0.2) 0%, rgba(0, 119, 204, 0.2) 100%);
-  border: 2px solid rgba(0, 191, 255, 0.5);
-  border-radius: 12px;
-  box-shadow: 0 0 20px rgba(0, 191, 255, 0.3), inset 0 0 10px rgba(0, 191, 255, 0.1);
-  backdrop-filter: blur(5px);
-  margin-bottom: 30px;
-  width: 100%;
-  max-width: 220px;
-  position: relative;
-  overflow: hidden;
-  animation: timePulse 3s ease-in-out infinite alternate;
-}
-
-/* 炫酷背景效果 */
-.datetime-display::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: repeating-linear-gradient(
-    45deg,
-    rgba(0, 191, 255, 0.05),
-    rgba(0, 191, 255, 0.05) 10px,
-    rgba(0, 191, 255, 0.03) 10px,
-    rgba(0, 191, 255, 0.03) 20px
-  );
-  animation: gridMove 8s linear infinite;
-  pointer-events: none;
-}
-
-@keyframes gridMove {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(20px, 20px); }
-}
-
-@keyframes timePulse {
-  from {
-    box-shadow: 0 0 20px rgba(0, 191, 255, 0.3), inset 0 0 10px rgba(0, 191, 255, 0.1);
-  }
-  to {
-    box-shadow: 0 0 30px rgba(0, 191, 255, 0.5), inset 0 0 15px rgba(0, 191, 255, 0.2);
-  }
-}
-
-.date-line {
-  font-size: 18px;
-  color: #00bfff;
-  font-weight: 600;
-  font-family: 'Courier New', monospace;
-  letter-spacing: 1px;
-  text-shadow: 0 0 8px rgba(0, 191, 255, 0.7);
-  animation: textGlow 2s ease-in-out infinite alternate;
-  position: relative;
-  z-index: 1;
-}
-
-.time-line {
-  font-size: 24px;
-  color: #ffffff;
-  font-weight: bold;
-  letter-spacing: 2px;
-  font-family: 'Courier New', monospace;
-  text-shadow: 0 0 12px rgba(0, 191, 255, 0.9), 0 0 24px rgba(0, 191, 255, 0.5);
-  animation: timeGlow 1.5s ease-in-out infinite alternate;
-  position: relative;
-  z-index: 1;
-}
-
-@keyframes textGlow {
-  from { text-shadow: 0 0 8px rgba(0, 191, 255, 0.7); }
-  to { text-shadow: 0 0 15px rgba(0, 191, 255, 0.9); }
-}
-
-@keyframes timeGlow {
-  from {
-    text-shadow: 0 0 12px rgba(0, 191, 255, 0.9), 0 0 24px rgba(0, 191, 255, 0.5);
-  }
-  to {
-    text-shadow: 0 0 18px rgba(0, 191, 255, 1), 0 0 36px rgba(0, 191, 255, 0.8), 0 0 48px rgba(0, 191, 255, 0.6);
-  }
-}
 .dashboard-button.secondary {
-  /* 系统启动、停机、故障复位按钮 - 相对不明显的样式 */
-  background: linear-gradient(135deg, rgba(0, 191, 255, 0.1), rgba(0, 119, 204, 0.1));
-  border-color: #0077cc;
-  color: #b0c4de;
+  background: linear-gradient(135deg, rgba(66, 133, 244, 0.1), rgba(52, 119, 235, 0.1));
+  border-color: #4285f4;
+  color: #2c3e50;
 }
+
 .dashboard-button.secondary:hover {
-  background: linear-gradient(135deg, rgba(0, 191, 255, 0.2), rgba(0, 119, 204, 0.2));
-  border-color: #00bfff;
-  color: #ffffff;
+  background: linear-gradient(135deg, rgba(66, 133, 244, 0.2), rgba(52, 119, 235, 0.2));
+  border-color: #3367d6;
 }
-/* 数据列表样式（新增状态色） */
+
+/* 数据列表样式 */
 .data-lists-container {
   display: flex;
   gap: 20px;
   flex: 1;
   width: 100%;
 }
+
 .data-list {
   flex: 1;
-  background: rgba(10, 40, 60, 0.7);
+  background: rgba(255, 255, 255, 0.8);
   border-radius: 10px;
   padding: 20px;
-  border: 1px solid rgba(0, 191, 255, 0.2);
+  border: 1px solid rgba(66, 133, 244, 0.2);
   width: 100%;
   overflow-y: auto;
   max-height: 600px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
+
 .list-title {
   font-size: 18px;
   margin-bottom: 20px;
-  color: #00bfff;
+  color: #4285f4;
   text-align: center;
-  border-bottom: 2px solid rgba(0, 191, 255, 0.3);
+  border-bottom: 2px solid rgba(66, 133, 244, 0.3);
   padding-bottom: 10px;
 }
+
 .data-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 12px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
+
 .data-item:last-child {
   border-bottom: none;
 }
+
 .data-label {
-  color: #b0c4de;
+  color: #5f6368;
   font-size: 14px;
 }
+
 .data-value {
-  color: #ffffff;
+  color: #2c3e50;
   font-size: 16px;
   font-weight: bold;
 }
+
 .data-value.normal {
-  color: #00ff00;
+  color: #34a853;
 }
+
 .data-value.abnormal {
-  color: #ff6b6b;
-}
-/* 图片区域样式（停机时显示占位符） */
-.image-container {
-  height: 50%;
-  min-height: 325px;
-  background: rgba(10, 40, 60, 0.7);
-  border-radius: 10px;
-  border: 1px solid rgba(0, 191, 255, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  position: relative;
+  color: #ea4335;
 }
 
 /* 设备图片包装器 */
@@ -1502,24 +1474,7 @@ body {
 .data-value {
   font-size: 12px;
   font-weight: normal;
-  color: #d0d0d0;
-}
-
-/* 主标题样式 */
-.dashboard-title {
-  text-align: center;
-  padding: 20px 0;
-  margin-bottom: 20px;
-  background: linear-gradient(135deg, rgba(0, 191, 255, 0.1), rgba(0, 119, 204, 0.1));
-  border-bottom: 1px solid rgba(0, 191, 255, 0.3);
-}
-
-.dashboard-title h1 {
-  font-size: 28px;
-  font-weight: bold;
-  color: #00bfff;
-  text-shadow: 0 0 10px rgba(0, 191, 255, 0.5);
-  margin: 0;
+  color: #5f6368;
 }
 
 /* 数据值异常状态（停机） */
@@ -1528,7 +1483,7 @@ body {
 }
 
 .data-value-display.alert .data-value {
-  color: #a0d2eb;
+  color: #ea4335;
 }
 
 /* 数据值正常状态（运行） */
@@ -1537,53 +1492,57 @@ body {
 }
 
 .data-value-display.running .data-value {
-  color: #ffffff;
+  color: #2c3e50;
 }
 
 @keyframes alertPulse {
   0% {
-    text-shadow: 0 0 5px rgba(160, 210, 235, 0.5);
+    text-shadow: 0 0 5px rgba(234, 67, 53, 0.3);
   }
   50% {
-    text-shadow: 0 0 15px rgba(160, 210, 235, 0.8);
+    text-shadow: 0 0 10px rgba(234, 67, 53, 0.5);
   }
   100% {
-    text-shadow: 0 0 5px rgba(160, 210, 235, 0.5);
+    text-shadow: 0 0 5px rgba(234, 67, 53, 0.3);
   }
 }
 
 @keyframes runningPulse {
   0% {
-    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    text-shadow: 0 0 5px rgba(66, 133, 244, 0.3);
   }
   50% {
-    text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+    text-shadow: 0 0 10px rgba(66, 133, 244, 0.5);
   }
   100% {
-    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    text-shadow: 0 0 5px rgba(66, 133, 244, 0.3);
   }
 }
+
 .placeholder-image {
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgba(0, 191, 255, 0.1), rgba(0, 119, 204, 0.1));
+  background: linear-gradient(135deg, rgba(66, 133, 244, 0.1), rgba(52, 119, 235, 0.1));
 }
+
 .placeholder-image span {
   font-size: 24px;
-  color: rgba(0, 191, 255, 0.5);
+  color: rgba(66, 133, 244, 0.5);
   text-align: center;
   padding: 0 20px;
 }
-/* 圆形图表样式（动态进度） */
+
+/* 圆形图表样式 */
 .gauge-charts-container {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 15px;
   height: 25%;
 }
+
 .gauge-chart {
   display: flex;
   flex-direction: column;
@@ -1591,107 +1550,115 @@ body {
   justify-content: center;
   padding: 10px;
 }
+
 .gauge-title {
   font-size: 14px;
-  color: #b0c4de;
+  color: #5f6368;
   margin-bottom: 10px;
   text-align: center;
   white-space: nowrap;
 }
+
 .gauge-circle {
   position: relative;
   width: 80px;
   height: 80px;
   border-radius: 50%;
   background: conic-gradient(
-    rgba(0, 191, 255, 0.2) 0%,
-    rgba(0, 191, 255, 0.2) var(--progress, 0%),
-    rgba(0, 191, 255, 0.8) var(--progress, 0%),
-    rgba(0, 191, 255, 0.8) 100%
+    rgba(66, 133, 244, 0.2) 0%,
+    rgba(66, 133, 244, 0.2) var(--progress, 0%),
+    rgba(66, 133, 244, 0.8) var(--progress, 0%),
+    rgba(66, 133, 244, 0.8) 100%
   );
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
 .gauge-circle::before {
   content: '';
   position: absolute;
   width: 70px;
   height: 70px;
   border-radius: 50%;
-  background: #0a1929;
+  background: #f5f7fa;
 }
+
 .gauge-value {
   position: relative;
   font-size: 14px;
   font-weight: bold;
-  color: #ffffff;
+  color: #2c3e50;
   text-align: center;
   white-space: nowrap;
 }
-/* 趋势图样式（新增坐标+数据点） */
+
+/* 趋势图样式 */
 .trend-charts-container {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
+
 .trend-chart-row {
   display: flex;
   gap: 20px;
   flex: 1;
 }
+
 .trend-chart {
   flex: 1;
-  background: rgba(10, 40, 60, 0.7);
+  background: rgba(255, 255, 255, 0.8);
   border-radius: 10px;
-  border: 1px solid rgba(0, 191, 255, 0.2);
+  border: 1px solid rgba(66, 133, 244, 0.2);
   padding: 15px;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
+
 .trend-title {
   font-size: 14px;
-  color: #b0c4de;
+  color: #5f6368;
   margin-bottom: 10px;
   text-align: center;
 }
+
 .trend-plot {
   flex: 1;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.6);
   border-radius: 5px;
   padding: 10px;
 }
+
 /* 坐标轴样式优化 */
 .axis line {
   stroke-linecap: round;
+  stroke: #b0bec5;
 }
+
 .axis text {
-  font-family: 'Arial', sans-serif;
+  font-family: 'Segoe UI', sans-serif;
   letter-spacing: 0.5px;
+  fill: #5f6368;
 }
+
 /* 数据点样式优化 */
 .trend-plot circle {
   transition: transform 0.2s ease;
 }
+
 .trend-plot circle:hover {
   transform: scale(1.2);
 }
+
 .trend-plot text {
   font-weight: 500;
-  text-shadow: 0 0 3px rgba(0,0,0,0.8);
+  text-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
 }
-/* 科技感装饰 */
-.dashboard-container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(circle at 50% 50%, rgba(0, 191, 255, 0.05) 0%, rgba(0, 191, 255, 0) 70%);
-  pointer-events: none;
-}
+
 /* 响应式调整 */
 @media (max-width: 1200px) {
   .gauge-charts-container {
@@ -1713,6 +1680,7 @@ body {
     width: 100%;
   }
 }
+
 @media (max-width: 768px) {
   .top-section {
     flex-direction: column;
@@ -1745,5 +1713,89 @@ body {
   .trend-plot text {
     font-size: 8px;
   }
+}
+/* 在现有的CSS样式中添加或更新以下规则 */
+
+.central-image-container {
+  width: 100%;
+  height: 60vh;
+  min-height: 400px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  border: 1px solid rgba(66, 133, 244, 0.2);
+  display: flex;
+  align-items: center;
+  padding-left: 0%;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.equipment-image-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* 如果需要启用数据点显示，可以添加以下样式 */
+.data-points-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  transform: translateX(0%);
+}
+
+.data-value-display {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+  z-index: 10;
+  white-space: nowrap;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(66, 133, 244, 0.3);
+  border-radius: 6px;
+  padding: 8px 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+}
+
+.data-value {
+  font-size: 12px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.data-value-display.alert .data-value {
+  color: #ea4335;
+}
+
+.data-value-display.running .data-value {
+  color: #34a853;
+}
+
+.placeholder-image {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(66, 133, 244, 0.1), rgba(52, 119, 235, 0.1));
+  border-radius: 10px;
+}
+
+.placeholder-image span {
+  font-size: 18px;
+  color: rgba(66, 133, 244, 0.6);
+  text-align: center;
+  padding: 0 20px;
+  font-weight: 500;
 }
 </style>
