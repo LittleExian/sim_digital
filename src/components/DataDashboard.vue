@@ -27,109 +27,279 @@
         </div>
       </div>
       
-<!-- 中央图片区域（占3/5） -->
-<div class="central-image-container">
-  <div class="equipment-image-wrapper">
-    <!-- 3D模型容器 -->
-    <div ref="modelContainer" style="width: 100%; height: 100%; position: absolute;"></div>
-    <!-- 模型加载提示 -->
-    <div v-if="!model" ref="loadingIndicator" style="
-      width: 100%; 
-      height: 100%; 
-      display: flex; 
-      flex-direction: column; 
-      align-items: center; 
-      justify-content: center; 
-      position: absolute; 
-      background-color: #f8fafc;
-      color: #2c3e50; 
-      font-size: 18px; 
-      font-weight: 600;
-      border-radius: 10px;
-      box-shadow: inset 0 0 20px rgba(66, 133, 244, 0.1);
-    ">
-      <div style="margin-bottom: 20px; text-align: center;">
-        <div style="font-size: 24px; color: #4285f4; margin-bottom: 8px;">🔧</div>
-        <div>3D模型加载中，请稍候...</div>
-      </div>
-      <div style="width: 300px; height: 20px; background-color: rgba(66, 133, 244, 0.1); border-radius: 10px; overflow: hidden; position: relative; border: 1px solid rgba(66, 133, 244, 0.2);">
-        <div 
-          style="
+      <!-- 中央图片区域（占3/5） -->
+      <div class="central-image-container">
+        <div class="equipment-image-wrapper">
+          <!-- 3D模型容器 -->
+          <div ref="modelContainer" style="width: 100%; height: 100%; position: absolute;"></div>
+          
+          <!-- 设备看板弹窗 -->
+          <div v-if="dashboardVisible && selectedDevice" class="device-dashboard-modal" @click.self="closeDeviceDashboard">
+            <div class="device-dashboard">
+              <div class="dashboard-header">
+                <h3>{{ selectedDevice.name }}信息看板</h3>
+                <button class="close-button" @click="closeDeviceDashboard">×</button>
+              </div>
+              <div class="dashboard-content">
+                <!-- 燃气发电机看板 -->
+                <div v-if="selectedDevice.id === 'generator'" class="dashboard-grid">
+                  <div class="dashboard-item">
+                    <div class="item-label">发电Uab</div>
+                    <div class="item-value">{{ systemData[currentSystemState].generator.Uab }}</div>
+                  </div>
+                  <div class="dashboard-item">
+                    <div class="item-label">A相电流</div>
+                    <div class="item-value">{{ systemData[currentSystemState].generator.currentA }}</div>
+                  </div>
+                  <div class="dashboard-item">
+                    <div class="item-label">总有功功率</div>
+                    <div class="item-value">{{ systemData[currentSystemState].generator.powerTotal }}</div>
+                  </div>
+                  <div class="dashboard-item">
+                    <div class="item-label">总无功功率</div>
+                    <div class="item-value">{{ systemData[currentSystemState].generator.reactiveTotal }}</div>
+                  </div>
+                  <div class="dashboard-item">
+                    <div class="item-label">发电频率</div>
+                    <div class="item-value">{{ systemData[currentSystemState].generator.frequency }}</div>
+                  </div>
+                  <div class="dashboard-item">
+                    <div class="item-label">发电机转速</div>
+                    <div class="item-value">{{ systemData[currentSystemState].generator.speed }}</div>
+                  </div>
+                  <div class="dashboard-item">
+                    <div class="item-label">排气温度</div>
+                    <div class="item-value">{{ systemData[currentSystemState].generator.exhaustTemp }}</div>
+                  </div>
+                  <div class="dashboard-item">
+                    <div class="item-label">并网开关状态</div>
+                    <div class="item-value" :class="systemData[currentSystemState].generator.gridSwitch === '合闸' ? 'normal' : 'abnormal'">
+                      {{ systemData[currentSystemState].generator.gridSwitch }}
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- 溴化锂机组看板 -->
+                <div v-if="selectedDevice.id === 'lithium'" class="dashboard-grid">
+                  <div class="dashboard-item">
+                    <div class="item-label">冷水供水温度</div>
+                    <div class="item-value">{{ systemData[currentSystemState].lithium.coldInTemp }}</div>
+                  </div>
+                  <div class="dashboard-item">
+                    <div class="item-label">冷水回水温度</div>
+                    <div class="item-value">{{ systemData[currentSystemState].lithium.coldOutTemp }}</div>
+                  </div>
+                  <div class="dashboard-item">
+                    <div class="item-label">烟气进口温度</div>
+                    <div class="item-value">{{ systemData[currentSystemState].lithium.smokeInTemp }}</div>
+                  </div>
+                  <div class="dashboard-item">
+                    <div class="item-label">烟气出口温度</div>
+                    <div class="item-value">{{ systemData[currentSystemState].lithium.smokeOutTemp }}</div>
+                  </div>
+                  <div class="dashboard-item">
+                    <div class="item-label">冷却水供水温度</div>
+                    <div class="item-value">{{ systemData[currentSystemState].lithium.coolInTemp }}</div>
+                  </div>
+                  <div class="dashboard-item">
+                    <div class="item-label">冷却水回水温度</div>
+                    <div class="item-value">{{ systemData[currentSystemState].lithium.coolOutTemp }}</div>
+                  </div>
+                  <div class="dashboard-item">
+                    <div class="item-label">蒸发器温度</div>
+                    <div class="item-value">{{ systemData[currentSystemState].lithium.evaporatorTemp }}</div>
+                  </div>
+                  <div class="dashboard-item">
+                    <div class="item-label">蒸发器压力</div>
+                    <div class="item-value">{{ systemData[currentSystemState].lithium.evaporatorPress }}</div>
+                  </div>
+                </div>
+                
+                <!-- 电网系统看板 -->
+                <div v-if="selectedDevice.id === 'powerGrid'" class="dashboard-grid">
+                  <div class="dashboard-item">
+                    <div class="item-label">市电Uab</div>
+                    <div class="item-value">{{ systemData[currentSystemState].powerGrid.Uab }}</div>
+                  </div>
+                  <div class="dashboard-item">
+                    <div class="item-label">市电Ubc</div>
+                    <div class="item-value">{{ systemData[currentSystemState].powerGrid.Ubc }}</div>
+                  </div>
+                  <div class="dashboard-item">
+                    <div class="item-label">市电Uca</div>
+                    <div class="item-value">{{ systemData[currentSystemState].powerGrid.Uca }}</div>
+                  </div>
+                  <div class="dashboard-item">
+                    <div class="item-label">系统状态</div>
+                    <div class="item-value" :class="currentSystemState === 'running' ? 'normal' : 'abnormal'">
+                      {{ currentSystemState === 'running' ? '运行中' : '已停机' }}
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- 水泵看板 -->
+                <div v-if="selectedDevice.id === 'waterPump'" class="dashboard-grid">
+                  <div class="dashboard-item">
+                    <div class="item-label">水泵出口压力</div>
+                    <div class="item-value">{{ currentSystemState === 'running' ? '0.45MPa' : '0MPa' }}</div>
+                  </div>
+                  <div class="dashboard-item">
+                    <div class="item-label">水泵流量</div>
+                    <div class="item-value">{{ currentSystemState === 'running' ? '120m³/h' : '0m³/h' }}</div>
+                  </div>
+                  <div class="dashboard-item">
+                    <div class="item-label">水泵电流</div>
+                    <div class="item-value">{{ currentSystemState === 'running' ? '35.2A' : '0A' }}</div>
+                  </div>
+                  <div class="dashboard-item">
+                    <div class="item-label">水泵温度</div>
+                    <div class="item-value">{{ currentSystemState === 'running' ? '42.5℃' : '环境温度' }}</div>
+                  </div>
+                  <div class="dashboard-item">
+                    <div class="item-label">水泵状态</div>
+                    <div class="item-value" :class="currentSystemState === 'running' ? 'normal' : 'abnormal'">
+                      {{ currentSystemState === 'running' ? '运行中' : '已停机' }}
+                    </div>
+                  </div>
+                  <div class="dashboard-item">
+                    <div class="item-label">累计运行时间</div>
+                    <div class="item-value">1682.5h</div>
+                  </div>
+                </div>
+                
+                <!-- 风冷式设备看板 -->
+                <div v-if="selectedDevice.id === 'airCooler'" class="dashboard-grid">
+                  <div class="dashboard-item">
+                    <div class="item-label">进风温度</div>
+                    <div class="item-value">{{ currentSystemState === 'running' ? '28.5℃' : '环境温度' }}</div>
+                  </div>
+                  <div class="dashboard-item">
+                    <div class="item-label">出风温度</div>
+                    <div class="item-value">{{ currentSystemState === 'running' ? '18.2℃' : '环境温度' }}</div>
+                  </div>
+                  <div class="dashboard-item">
+                    <div class="item-label">风机转速</div>
+                    <div class="item-value">{{ currentSystemState === 'running' ? '1450rpm' : '0rpm' }}</div>
+                  </div>
+                  <div class="dashboard-item">
+                    <div class="item-label">风机电流</div>
+                    <div class="item-value">{{ currentSystemState === 'running' ? '12.8A' : '0A' }}</div>
+                  </div>
+                  <div class="dashboard-item">
+                    <div class="item-label">设备状态</div>
+                    <div class="item-value" :class="currentSystemState === 'running' ? 'normal' : 'abnormal'">
+                      {{ currentSystemState === 'running' ? '运行中' : '已停机' }}
+                    </div>
+                  </div>
+                  <div class="dashboard-item">
+                    <div class="item-label">制冷量</div>
+                    <div class="item-value">{{ currentSystemState === 'running' ? '120kW' : '0kW' }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="dashboard-footer">
+                <div class="update-time">更新时间: {{ currentTime }}</div>
+              </div>
+            </div>
+          </div>
+          <!-- 模型加载提示 -->
+          <div v-if="!model" ref="loadingIndicator" style="
+            width: 100%; 
             height: 100%; 
-            background: linear-gradient(90deg, #4285f4, #3367d6); 
-            transition: width 0.3s ease;
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            position: absolute; 
+            background-color: #f8fafc;
+            color: #2c3e50; 
+            font-size: 18px; 
+            font-weight: 600;
             border-radius: 10px;
-          "
-          :style="{ width: modelLoadingProgress + '%' }"
-        ></div>
-        <!-- 百分比文本显示在进度条外部，确保始终完整可见 -->
-        <div style="
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          color: #4285f4;
-          font-size: 12px;
-          font-weight: bold;
-          pointer-events: none;
-          text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
-          min-width: 40px;
-          text-align: center;
-        ">
-          {{ Math.round(modelLoadingProgress) }}%
+            box-shadow: inset 0 0 20px rgba(66, 133, 244, 0.1);
+          ">
+            <div style="margin-bottom: 20px; text-align: center;">
+              <div style="font-size: 24px; color: #4285f4; margin-bottom: 8px;">🔧</div>
+              <div>3D模型加载中，请稍候...</div>
+            </div>
+            <div style="width: 300px; height: 20px; background-color: rgba(66, 133, 244, 0.1); border-radius: 10px; overflow: hidden; position: relative; border: 1px solid rgba(66, 133, 244, 0.2);">
+              <div 
+                style="
+                  height: 100%; 
+                  background: linear-gradient(90deg, #4285f4, #3367d6); 
+                  transition: width 0.3s ease;
+                  border-radius: 10px;
+                "
+                :style="{ width: modelLoadingProgress + '%' }"
+              ></div>
+              <!-- 百分比文本显示在进度条外部，确保始终完整可见 -->
+              <div style="
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                color: #4285f4;
+                font-size: 12px;
+                font-weight: bold;
+                pointer-events: none;
+                text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+                min-width: 40px;
+                text-align: center;
+              ">
+                {{ Math.round(modelLoadingProgress) }}%
+              </div>
+            </div>
+            <div style="margin-top: 15px; font-size: 12px; color: #5f6368; text-align: center;">
+              正在加载冷热电联供系统3D模型...
+            </div>
+          </div>
+          
+          <!-- 顶层数据点层 -->
+          <!-- <div class="data-points-overlay"> -->
+            <!-- 冷却水供水温度 -->
+            <!-- <div class="data-value-display" style="left: 69%; top: 43%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
+              <div class="data-value">{{ systemData[currentSystemState].lithium.coolInTemp }}</div>
+            </div> -->
+
+            <!-- 冷却水回水温度 -->
+            <!-- <div class="data-value-display" style="left: 75%; top: 43%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
+              <div class="data-value">{{ systemData[currentSystemState].lithium.coolOutTemp }}</div>
+            </div> -->
+
+            <!-- 冷水供水温度 -->
+            <!-- <div class="data-value-display" style="left: 61%; top: 55%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
+              <div class="data-value">{{ systemData[currentSystemState].lithium.coldInTemp }}</div>
+            </div> -->
+
+            <!-- 冷水回水温度 -->
+            <!-- <div class="data-value-display" style="left: 66%; top: 55%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
+              <div class="data-value">{{ systemData[currentSystemState].lithium.coldOutTemp }}</div>
+            </div> -->
+
+            <!-- 烟气进口温度 -->
+            <!-- <div class="data-value-display" style="left: 54%; top: 40.5%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
+              <div class="data-value">{{ systemData[currentSystemState].lithium.smokeInTemp }}</div>
+            </div> -->
+
+            <!-- 烟气出口温度 -->
+            <!-- <div class="data-value-display" style="left: 54%; top: 30.5%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
+              <div class="data-value">{{ systemData[currentSystemState].lithium.smokeOutTemp }}</div>
+            </div> -->
+
+            <!-- 发电机参数 -->
+            <!-- <div class="data-value-display" style="left: 28%; top: 50%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
+              <div class="data-value" style="display: flex; justify-content: space-around; gap: 20px;"> 发电Uab <span style="text-align: right;">{{systemData[currentSystemState].generator.Uab }}</span></div>
+              <div class="data-value" style="display: flex; justify-content: space-around; gap: 20px;"> A相电流 <span style="text-align: right;">{{ systemData[currentSystemState].generator.currentA }}</span></div>
+              <div class="data-value" style="display: flex; justify-content: space-between; gap: 20px;">总有功功率 <span style="text-align: right;">{{ systemData[currentSystemState].generator.powerTotal }}</span></div>
+              <div class="data-value" style="display: flex; justify-content: space-between; gap: 20px;">总无功功率 <span style="text-align: right;">{{ systemData[currentSystemState].generator.reactiveTotal }}</span></div>
+            </div> -->
+          <!-- </div> -->
         </div>
+        
+        <!-- <div class="placeholder-image" v-else>
+          <span>系统停机中，启动后显示设备运行画面</span>
+        </div> -->
       </div>
-      <div style="margin-top: 15px; font-size: 12px; color: #5f6368; text-align: center;">
-        正在加载冷热电联供系统3D模型...
-      </div>
-    </div>
-    
-    <!-- 顶层数据点层 -->
-    <!-- <div class="data-points-overlay"> -->
-      <!-- 冷却水供水温度 -->
-      <!-- <div class="data-value-display" style="left: 69%; top: 43%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
-        <div class="data-value">{{ systemData[currentSystemState].lithium.coolInTemp }}</div>
-      </div> -->
-
-      <!-- 冷却水回水温度 -->
-      <!-- <div class="data-value-display" style="left: 75%; top: 43%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
-        <div class="data-value">{{ systemData[currentSystemState].lithium.coolOutTemp }}</div>
-      </div> -->
-
-      <!-- 冷水供水温度 -->
-      <!-- <div class="data-value-display" style="left: 61%; top: 55%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
-        <div class="data-value">{{ systemData[currentSystemState].lithium.coldInTemp }}</div>
-      </div> -->
-
-      <!-- 冷水回水温度 -->
-      <!-- <div class="data-value-display" style="left: 66%; top: 55%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
-        <div class="data-value">{{ systemData[currentSystemState].lithium.coldOutTemp }}</div>
-      </div> -->
-
-      <!-- 烟气进口温度 -->
-      <!-- <div class="data-value-display" style="left: 54%; top: 40.5%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
-        <div class="data-value">{{ systemData[currentSystemState].lithium.smokeInTemp }}</div>
-      </div> -->
-
-      <!-- 烟气出口温度 -->
-      <!-- <div class="data-value-display" style="left: 54%; top: 30.5%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
-        <div class="data-value">{{ systemData[currentSystemState].lithium.smokeOutTemp }}</div>
-      </div> -->
-
-      <!-- 发电机参数 -->
-      <!-- <div class="data-value-display" style="left: 28%; top: 50%;" :class="{ 'alert': currentSystemState === 'shutdown', 'running': currentSystemState === 'running' }">
-        <div class="data-value" style="display: flex; justify-content: space-around; gap: 20px;"> 发电Uab <span style="text-align: right;">{{systemData[currentSystemState].generator.Uab }}</span></div>
-        <div class="data-value" style="display: flex; justify-content: space-around; gap: 20px;"> A相电流 <span style="text-align: right;">{{ systemData[currentSystemState].generator.currentA }}</span></div>
-        <div class="data-value" style="display: flex; justify-content: space-between; gap: 20px;">总有功功率 <span style="text-align: right;">{{ systemData[currentSystemState].generator.powerTotal }}</span></div>
-        <div class="data-value" style="display: flex; justify-content: space-between; gap: 20px;">总无功功率 <span style="text-align: right;">{{ systemData[currentSystemState].generator.reactiveTotal }}</span></div>
-      </div> -->
-    <!-- </div> -->
-  </div>
-  
-  <!-- <div class="placeholder-image" v-else>
-    <span>系统停机中，启动后显示设备运行画面</span>
-  </div> -->
-</div>
       
       <!-- 右侧控制区 -->
       <div class="right-controls">
@@ -526,6 +696,48 @@ export default {
       camera: null,
       renderer: null,
       animationId: null,
+      // 设备信息按钮数据
+      deviceButtons: [
+        {
+          id: 'generator',
+          name: '燃气发电机',
+          position: { x: -3, y: 0.1, z: 1.5 },
+          visible: true,
+          dataSource: 'generator'
+        },
+        {
+          id: 'lithium',
+          name: '溴化锂机组',
+          position: { x: -3, y: 0.1, z: -1.5 },
+          visible: true,
+          dataSource: 'lithium'
+        },
+        {
+          id: 'powerGrid',
+          name: '电网系统',
+          position: { x: -1, y: 0.1, z: 5 },
+          visible: true,
+          dataSource: 'powerGrid'
+        },
+        {
+          id: 'waterPump',
+          name: '水泵',
+          position: { x: 2, y: 0.1, z: 3 },
+          visible: true,
+          dataSource: 'waterPump'
+        },
+        {
+          id: 'airCooler',
+          name: '风冷式设备',
+          position: { x: -4.5, y: 0.1, z: -10 },
+          visible: true,
+          dataSource: 'airCooler'
+        }
+      ],
+      // 当前选中的设备
+      selectedDevice: null,
+      // 看板显示状态
+      dashboardVisible: false,
 
     // 趋势图的基础配置
     trendChartConfig: {
@@ -963,6 +1175,14 @@ loader.load(
 
     // 鼠标交互
     this.addMouseInteraction();
+    
+    // 添加设备信息按钮
+    this.createDeviceButtons();
+    console.log('设备按钮已创建');
+    
+    // 启动动画循环以更新按钮位置
+    this.startAnimationLoop();
+    console.log('动画循环已启动');
 
     console.log('3D模型加载成功，已适配容器大小，支持鼠标缩放和旋转');
 
@@ -1133,6 +1353,188 @@ loader.load(
         this.renderer.render(this.scene, this.camera);
       });
     },
+    
+    // 创建设备信息按钮
+    createDeviceButtons() {
+      console.log('开始创建设备按钮...');
+      
+      if (!this.$refs.modelContainer) {
+        console.error('modelContainer不存在');
+        return;
+      }
+      
+      console.log('modelContainer存在，容器大小:', {
+        width: this.$refs.modelContainer.offsetWidth,
+        height: this.$refs.modelContainer.offsetHeight
+      });
+      
+      // 清除现有的按钮
+      const existingButtons = document.querySelectorAll('.device-info-button');
+      console.log(`清除${existingButtons.length}个现有按钮`);
+      existingButtons.forEach(button => button.remove());
+      
+      // 创建设备按钮容器
+      let buttonsContainer = document.getElementById('device-buttons-container');
+      if (!buttonsContainer) {
+        buttonsContainer = document.createElement('div');
+        buttonsContainer.id = 'device-buttons-container';
+        buttonsContainer.style.position = 'absolute';
+        buttonsContainer.style.top = '0';
+        buttonsContainer.style.left = '0';
+        buttonsContainer.style.width = '100%';
+        buttonsContainer.style.height = '100%';
+        buttonsContainer.style.pointerEvents = 'none';
+        buttonsContainer.style.zIndex = '10';
+        this.$refs.modelContainer.appendChild(buttonsContainer);
+        console.log('创建了按钮容器');
+      }
+      
+      // 创建新按钮
+      console.log(`准备创建${this.deviceButtons.length}个设备按钮`);
+      this.deviceButtons.forEach(device => {
+        if (!device.visible) {
+          console.log(`跳过不可见设备: ${device.id}`);
+          return;
+        }
+        
+        console.log(`创建设备按钮: ${device.id} - ${device.name}, 位置:`, device.position);
+        
+        const button = document.createElement('div');
+        button.className = 'device-info-button';
+        button.dataset.deviceId = device.id;
+        
+        // 设置初始样式，确保可见
+        button.style.position = 'absolute';
+        button.style.width = '70px';
+        button.style.height = '70px';
+        button.style.backgroundColor = 'rgba(135, 206, 235, 0.8)';
+        button.style.border = '2px solid #ffffff';
+        button.style.borderRadius = '50%';
+        button.style.display = 'flex';
+        button.style.flexDirection = 'column';
+        button.style.alignItems = 'center';
+        button.style.justifyContent = 'center';
+        button.style.cursor = 'pointer';
+        button.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.2)';
+        button.style.zIndex = '100';
+        button.style.pointerEvents = 'auto';
+        button.style.transition = 'all 0.3s ease';
+        
+        button.innerHTML = `
+          <div class="button-label" style="color: white; font-size: 14px; text-align: center; font-weight: bold;">${device.name}</div>
+        `;
+        
+        // 添加点击事件
+        button.addEventListener('click', (event) => {
+          event.stopPropagation();
+          console.log(`点击设备按钮: ${device.id}`);
+          this.showDeviceDashboard(device);
+        });
+        
+        // 添加到按钮容器
+        buttonsContainer.appendChild(button);
+        console.log(`设备按钮 ${device.id} 已添加到容器`);
+        
+        // 初始位置设置，先放在容器中心附近，确保可见
+        button.style.left = '50%';
+        button.style.top = '50%';
+        button.style.transform = 'translate(-50%, -50%)';
+      });
+      
+      console.log('设备按钮创建完成');
+    },
+    
+    // 启动动画循环以更新按钮位置
+    startAnimationLoop() {
+      const animate = () => {
+        this.animationId = requestAnimationFrame(animate);
+        this.updateDeviceButtonPositions();
+      };
+      animate();
+    },
+    
+    // 更新设备按钮位置
+    updateDeviceButtonPositions() {
+      if (!this.model || !this.camera || !this.renderer) {
+        console.log('updateDeviceButtonPositions: 缺少必要的Three.js对象');
+        return;
+      }
+      
+      const container = this.$refs.modelContainer;
+      if (!container) {
+        console.log('updateDeviceButtonPositions: 容器不存在');
+        return;
+      }
+      
+      const rect = container.getBoundingClientRect();
+      
+      this.deviceButtons.forEach(device => {
+        if (!device.visible) {
+          console.log(`设备 ${device.id} 不可见`);
+          return;
+        }
+        
+        const button = document.querySelector(`.device-info-button[data-device-id="${device.id}"]`);
+        if (!button) {
+          console.log(`未找到设备 ${device.id} 的按钮元素`);
+          return;
+        }
+        
+        try {
+          // 创建设备位置的向量
+          const devicePosition = new THREE.Vector3(
+            device.position.x,
+            device.position.y,
+            device.position.z
+          );
+          
+          // 应用模型变换到设备位置
+          const rotatedPosition = devicePosition.clone();
+          rotatedPosition.applyMatrix4(this.model.matrixWorld);
+          
+          // 将3D位置转换为屏幕坐标
+          const screenPosition = rotatedPosition.clone();
+          screenPosition.project(this.camera);
+          
+          console.log(`设备 ${device.id} 3D位置:`, devicePosition);
+          console.log(`设备 ${device.id} 旋转后位置:`, rotatedPosition);
+          console.log(`设备 ${device.id} 屏幕位置:`, screenPosition);
+          
+          // 检查点是否在相机视野内
+          if (screenPosition.z > 1) {
+            console.log(`设备 ${device.id} 在相机视野外`);
+            button.style.display = 'none';
+            return;
+          }
+          
+          // 计算屏幕坐标
+          const x = (screenPosition.x * 0.5 + 0.5) * rect.width;
+          const y = (-screenPosition.y * 0.5 + 0.5) * rect.height;
+          
+          // 设置按钮位置
+          button.style.display = 'flex';
+          button.style.left = `${x - 40}px`; // 按钮宽度的一半
+          button.style.top = `${y - 40}px`; // 按钮高度的一半
+          button.style.zIndex = '100'; // 确保按钮在顶层
+          
+          console.log(`设备 ${device.id} 按钮位置:`, { x: `${x - 40}px`, y: `${y - 40}px` });
+        } catch (error) {
+          console.error(`更新设备 ${device.id} 按钮位置时出错:`, error);
+        }
+      });
+    },
+    
+    // 显示设备看板
+    showDeviceDashboard(device) {
+      this.selectedDevice = device;
+      this.dashboardVisible = true;
+    },
+    
+    // 关闭设备看板
+    closeDeviceDashboard() {
+      this.dashboardVisible = false;
+      this.selectedDevice = null;
+    }
   }
 }
 </script>
@@ -1156,6 +1558,209 @@ body {
   padding: 0;
   overflow-y: auto;
   background: #f5f7fa;
+}
+
+/* 设备信息按钮样式 */
+.device-info-button {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  background: rgba(66, 133, 244, 0.9);
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  z-index: 10;
+  pointer-events: auto;
+}
+
+.device-info-button:hover {
+  transform: scale(1.1);
+  background: rgba(52, 119, 235, 0.95);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.device-info-button .button-icon {
+  width: 32px;
+  height: 32px;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.device-info-button .button-label {
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* 设备看板模态框样式 */
+.device-dashboard-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.device-dashboard {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  width: 90%;
+  max-width: 800px;
+  max-height: 80vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.dashboard-header {
+  background: linear-gradient(135deg, #4285f4 0%, #3367d6 100%);
+  color: #ffffff;
+  padding: 20px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dashboard-header h3 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.close-button {
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 32px;
+  cursor: pointer;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.3s ease;
+}
+
+.close-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+
+.close-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.dashboard-content {
+  padding: 30px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.dashboard-item {
+  background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(226, 232, 240, 0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dashboard-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.item-label {
+  font-size: 14px;
+  color: #64748b;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.item-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #2c3e50;
+  line-height: 1.2;
+}
+
+.item-value.normal {
+  color: #10b981;
+}
+
+.item-value.abnormal {
+  color: #ef4444;
+}
+
+.dashboard-footer {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  padding: 15px 30px;
+  border-top: 1px solid rgba(226, 232, 240, 0.5);
+}
+
+.update-time {
+  color: #64748b;
+  font-size: 14px;
+  text-align: right;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .device-dashboard {
+    width: 95%;
+    max-height: 90vh;
+  }
+  
+  .dashboard-header {
+    padding: 15px 20px;
+  }
+  
+  .dashboard-header h3 {
+    font-size: 20px;
+  }
+  
+  .dashboard-content {
+    padding: 20px;
+  }
+  
+  .dashboard-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+  }
+  
+  .dashboard-item {
+    padding: 15px;
+  }
+  
+  .item-value {
+    font-size: 20px;
+  }
 }
 
 /* 主标题样式 */
@@ -1447,6 +2052,10 @@ body {
   position: relative;
   display: flex;
   align-items: center;
+  background-image: url('~@/../public/bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 /* 数据点覆盖层 */
